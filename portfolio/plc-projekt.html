@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vízszivattyú Projekt</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* HÁTTÉR BEÁLLÍTÁS (JAVÍTVA) */
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 10px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .scroll-container {
+            width: 100%;
+            height: 450px; 
+            overflow: auto; 
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #00f3ff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        
+        details {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        details[open] {
+            border-color: #bd00ff;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.1);
+        }
+        summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        summary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: #fff;
+        }
+        summary::after { content: '+'; font-size: 1.2rem; font-weight: bold; }
+        details[open] summary::after { content: '-'; }
+        details[open] summary { background: rgba(189, 0, 255, 0.2); color: #bd00ff; }
+        .digital-content { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.4); }
+
+        .io-table {
+            width: 100%; border-collapse: collapse; font-family: 'Fira Code', monospace; font-size: 0.9rem; color: #fff;
+        }
+        .io-table th, .io-table td { border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px; text-align: left; }
+        .io-table th { background: rgba(0, 243, 255, 0.1); color: #00f3ff; }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace; color: #00ff00; white-space: pre-wrap; font-size: 0.9rem; line-height: 1.5;
+        }
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1); border-left: 4px solid #bd00ff; padding: 20px; margin-top: 30px; border-radius: 0 10px 10px 0; font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Automata Vízszivattyú Vezérlés</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. Bevezetés (Projektleírás)</h2>
+        <p><strong>Projekt címe:</strong> Automata Vízszivattyú és Tartályürítő Rendszer.</p>
+        <p><strong>Tantárgyi kapcsolat:</strong> PLC Programozás + Ipari Automatizálás.</p>
+        <p><strong>A feladat lényege:</strong> Egy pneumatikus munkahengerekkel vezérelt szivattyúrendszer logikai vezérlésének megvalósítása. A rendszernek ciklikusan kell átszivattyúznia a folyadékot, majd meghatározott mennyiség után automatikusan ürítenie a tartályt.</p>
+
+        <h2>2. Technikai megvalósítás</h2>
+        <p><strong>Eszközök:</strong> VEEP FESTO Szimulátor, STEP 7 utasításlista (STL).</p>
+        <h3>Vízszivattyú program működése:</h3>
+        <p>Mivel a szivattyú az "A" henger alaphelyzetben bent van, ezért először ki kell mennie. Amikor visszajön, akkor szívja be az első adag vizet magába. Ezután, amikor újra kimegy, valójában ekkor nyomja át a vizet a tartályba.</p>
+        <p>A vízszivattyúnak <strong>3-szor kell átnyomnia</strong> a vizet a tartályba. Mikor megvolt a 3 ciklus, a "B" henger kiengedi a vizet, majd 5 mp után automatikusan zár.</p>
+
+        <h2>3. Eredmények és vizualizáció</h2>
+
+        <h3>Működési Diagram</h3>
+        <div class="scroll-container" style="height: 400px; background: rgba(255,255,255,0.9);">
+            <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9perny%C5%91k%C3%A9p%202026-01-10%20090537.png" alt="Működési Diagram" style="display:block; margin:0 auto;">
+        </div>
+
+        <h3>Útlépés Diagram (Logikai Terv)</h3>
+        <div class="scroll-container" style="height: 350px; background: rgba(255,255,255,0.9);">
+            <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9perny%C5%91k%C3%A9p%202026-01-10%20114742.png" alt="Útlépés Diagram" style="display:block; margin:0 auto; width: 100%;">
+        </div>
+
+        <h3>Allocation List</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/image_2025-06-06_22-45-45.png" alt="Allocation List" class="project-img">
+        <details>
+            <summary>➤ Digitális Tartalom: I/O Táblázat</summary>
+            <div class="digital-content">
+                <table class="io-table">
+                    <thead><tr><th>Cím</th><th>Jelölés</th><th>Funkció</th></tr></thead>
+                    <tbody>
+                        <tr><td>I0.0</td><td>S1</td><td>"A" henger hátul van</td></tr>
+                        <tr><td>I0.1</td><td>S2</td><td>"A" henger kint van</td></tr>
+                        <tr><td>I0.2</td><td>S3</td><td>"B" henger hátul van</td></tr>
+                        <tr><td>I0.3</td><td>S4</td><td>"B" henger kint van</td></tr>
+                        <tr><td>O0.0</td><td>A</td><td>"A" henger dolgozik</td></tr>
+                        <tr><td>O0.1</td><td>B</td><td>"B" henger dolgozik</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
+
+        <h3>Programkód (STL)</h3>
+        <div class="scroll-container">
+            <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/8b0ca342-a51a-44db-8a29-4bef5408ded1.png" alt="PLC Kód 1" class="project-img">
+            <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/5cb5fe76-02ec-40cf-b617-aa6dd265b856.png" alt="PLC Kód 2" class="project-img">
+        </div>
+        <details>
+            <summary>➤ Digitális Tartalom: Kód (Másolható)</summary>
+            <div class="digital-content">
+                <div class="code-snippet">
+STEP INIT   ””ALAPHELYZETBE ÁLLÍTÁS
+    THEN    RESET    A          'A henger alap
+            RESET    B          'B henger alap
+            LOAD     V500       '5 mp időzítő
+            TO       TP0        
+
+STEP 10     ””Vízszivattyúzás kezdete / 1. Ciklus
+    IF      START
+    AND     S1            
+    AND     S3            
+    THEN    SET      A         
+            SET      T
+
+STEP 20     ””Visszahúzás (Szívás) / Vissza a 2. ciklushoz
+    IF      S2
+    AND N   T
+    THEN    RESET    A
+
+STEP 30     ””Kinyomás a tartályba / Indulás 2.
+    IF      S1
+    THEN    SET      B
+
+STEP 40     ””Tovább a 2. Pozícióba
+    IF      S4
+    THEN    SET      A
+            SET      T
+
+STEP 50     ””Visszaindulás (Szívás) / 3. ciklusért
+    IF      S2
+    AND N   T
+    THEN    RESET    A
+
+STEP 60     ””Érkezés a 3. adaghoz
+    IF      S1
+    THEN    RESET    B
+
+STEP 70     ””3. adag átnyomása (Tartály ürítés kezdete)
+    IF      S3
+    THEN    SET      B
+            SET      T
+
+STEP 80     ””Visszatérés Alaphelyzetbe
+    IF      S4
+    AND N   T
+    THEN    RESET    B
+    END
+                </div>
+            </div>
+        </details>
+
+        <h2>Videó a működésről</h2>
+        <div style="margin-top:20px; border:1px solid #00f3ff; box-shadow:0 0 15px rgba(0,243,255,0.2);">
+            <video width="100%" controls controlsList="nodownload">
+                <source src="https://firebasestorage.googleapis.com/v0/b/database-7fff5.appspot.com/o/Project%20Weboldal%2FVide%C3%B3k%2FMarci%204.feladat.mp4?alt=media&token=3691a9f0-7b3a-45fe-bd0b-f6c92571b947" type="video/mp4">
+                A böngésződ nem támogatja a videó lejátszást.
+            </video>
+        </div>
+
+        <h2>4. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"Nem volt nehéz, csak időigényes. A Programot elsőre túlgondoltam, sokszor van, hogy túlbonyolítom a dolgokat. De összeállt minden, másodjára jó lett. A Dokumentációban időigényes volt a Működési diagram megcsinálása és az útlépés is, ott rájöttem, hogy egyszerűbb a vonalakat szegélyekkel megadni. Összességében meg vagyok elégedve."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hálózat Kialakítása</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul { margin-left: 20px; margin-bottom: 15px; }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .scroll-container {
+            width: 100%;
+            overflow-x: auto; 
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .io-table {
+            width: 100%; border-collapse: collapse; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #fff; min-width: 700px;
+        }
+        .io-table th, .io-table td { border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px; text-align: left; }
+        .io-table th { background: rgba(0, 243, 255, 0.1); color: #00f3ff; }
+
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1);
+            border-left: 4px solid #bd00ff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Gombatermesztő Kisüzem Hálózatának Tervezése és Kivitelezése</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. A projektmunka célja</h2>
+        <p>A projektmunka célja egy gombatermesztő kisüzem hálózatának megtervezése, szimulációs környezetben történő felépítése és tesztelése. A hálózatnak két fő funkcionális részt kell kiszolgálnia: egy adminisztrációs irodai alhálózatot két munkaállomással, valamint egy üzemi IoT (Dolgok Internete) alhálózatot. Az IoT-hálózat feladata a termesztéshez kulcsfontosságú környezeti tényezők – páratartalom, hőmérséklet, szén-dioxid-szint – valós idejű monitorozása és az ezekhez kapcsolódó beavatkozó eszközök (párásító, szellőztető) vezérlése.</p>
+        <p>A tervezés során elsődleges szempont volt egy stabil, biztonságos és a jövőben könnyen bővíthető (skálázható) hálózati struktúra kialakítása, amely lehetővé teszi a két alhálózat közötti kommunikációt, valamint az IoT eszközök távoli felügyeletét egy vezeték nélküli mobileszközről.</p>
+
+        <h2>2. IP-címzési Terv</h2>
+        <p>A hálózat három logikai alhálózatra lett bontva a forgalom szeparálása és a könnyebb adminisztráció érdekében:</p>
+        <ul>
+            <li><strong>Adminisztrációs LAN (192.168.1.0/24):</strong> Az irodai PC-k számára.</li>
+            <li><strong>IoT LAN (192.168.25.0/24):</strong> A szenzorok, beavatkozók és a felügyeleti tablet számára.</li>
+            <li><strong>Tranzit Hálózat (192.168.0.0/24):</strong> A központi router és a Home Gateway közötti kapcsolat biztosítására.</li>
+        </ul>
+        <p>Az IP-címek kiosztása részben statikus (hálózati eszközök), részben dinamikus (klienseszközök) módon, DHCP segítségével történik.</p>
+
+        <div class="scroll-container">
+            <table class="io-table">
+                <thead>
+                    <tr>
+                        <th>Hálózat</th>
+                        <th>Eszköz</th>
+                        <th>Interfész</th>
+                        <th>IP-cím</th>
+                        <th>Alhálózati maszk</th>
+                        <th>Alapértelmezett átjáró</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Adminisztrációs LAN</td>
+                        <td>Router0</td>
+                        <td>GigabitEthernet0/0/1</td>
+                        <td>192.168.1.1</td>
+                        <td>255.255.255.0</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>PC0</td>
+                        <td>FastEthernet0</td>
+                        <td>DHCP</td>
+                        <td>DHCP</td>
+                        <td>192.168.1.1</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>PC1</td>
+                        <td>FastEthernet0</td>
+                        <td>DHCP</td>
+                        <td>DHCP</td>
+                        <td>192.168.1.1</td>
+                    </tr>
+                    <tr>
+                        <td>Tranzit Hálózat</td>
+                        <td>Router0</td>
+                        <td>GigabitEthernet0/0/0</td>
+                        <td>192.168.0.1</td>
+                        <td>255.255.255.0</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Home Gateway0</td>
+                        <td>Internet</td>
+                        <td>DHCP</td>
+                        <td>DHCP</td>
+                        <td>192.168.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>IoT LAN</td>
+                        <td>Home Gateway0</td>
+                        <td>LAN / WLAN</td>
+                        <td>192.168.25.1</td>
+                        <td>255.255.255.0</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>TabletPC0</td>
+                        <td>Wireless0</td>
+                        <td>DHCP</td>
+                        <td>DHCP</td>
+                        <td>192.168.25.1</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>IoT Eszközök</td>
+                        <td>Wireless0</td>
+                        <td>DHCP</td>
+                        <td>DHCP</td>
+                        <td>192.168.25.1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>3. Topológiák</h2>
+        
+        <h3>Logikai Topológia</h3>
+        <p>A hálózat egy kiterjesztett csillag topológiát valósít meg. A hálózat központjában a Router0 (Cisco ISR 4331) áll, amely a routing feladatokat látja el a különböző alhálózatok között. Az adminisztrációs hálózatot egy Switch0 (Cisco 2960) szolgálja ki, amely a két PC-t és a routert köti össze. Az IoT-hálózatot egy Home Gateway0 eszköz menedzseli, amely vezeték nélkül csatlakoztatja a szenzorokat és a tabletet, valamint NAT-olás nélkül, router módban továbbítja a forgalmat a központi router felé.</p>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/logikai_topologia.png" alt="Logikai Topológia" class="project-img">
+
+        <h3>Fizikai Topológia</h3>
+        <p>Egy kisüzem méreteiből adódóan a hálózati eszközök (router, switch) egy központi helyiségben, egy kommunikációs szekrényben helyezkednek el. A PC-k az irodában, a Home Gateway és az IoT eszközök pedig az üzemi területen kerülnek telepítésre, a megfelelő lefedettség és működés érdekében.</p>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/fizikai_topologia.png" alt="Fizikai Topológia" class="project-img" style="max-width: 500px; display: block; margin: 0 auto;">
+
+        <h2>4. Technikai részletek</h2>
+
+        <h3>Felhasznált Eszközök és Közegek</h3>
+        <ul>
+            <li><strong>Router:</strong> 1 db Cisco ISR 4331</li>
+            <li><strong>Switch:</strong> 1 db Cisco 2960-24TT</li>
+            <li><strong>Vezeték nélküli eszköz:</strong> 1 db Home Gateway (DLC100)</li>
+            <li><strong>Végeszközök:</strong> 2 db PC, 1 db Tablet, 2 db CO2-érzékelő, 2 db Hőmérséklet-érzékelő, 2 db Páratartalom-érzékelő.</li>
+            <li><strong>Átviteli közeg:</strong> Réz egyenes kötésű (Copper Straight-Through) UTP kábel, Vezeték nélküli (Wireless) közeg.</li>
+        </ul>
+
+        <h3>Eszközök Konfigurálása</h3>
+        <p>A hálózat működéséhez elengedhetetlen a hálózati eszközök megfelelő beállítása. A konfigurációk a NVRAM-ba lettek mentve (write memory paranccsal), így egy esetleges áramkimaradás után is megmaradnak.</p>
+        
+        <p><strong>Home Gateway Konfiguráció:</strong> A Home Gateway beállítása a grafikus felhasználói felületén (GUI) keresztül történt. A legfontosabb lépések:</p>
+        <ul>
+            <li><strong>LAN Oldal:</strong> Az eszköz belső hálózati IP-címe 192.168.25.1-re lett állítva (255.255.255.0 maszk mellett).</li>
+            <li><strong>DHCP Szerver:</strong> A beépített DHCP szerver engedélyezésre került az IoT-hálózat számára, amely 192.168.25.100-tól kezdődően oszt címeket.</li>
+            <li><strong>WAN Oldal:</strong> Az "Internet" port Automatic Configuration - DHCP módba lett állítva, hogy a központi routertől automatikusan kapjon IP-címet a tranzit hálózaton.</li>
+        </ul>
+
+        <p><strong>Router Konfiguráció:</strong> A router beállítása a parancssoros felületen (CLI) történt. A főbb konfigurációs blokkok a következők:</p>
+        <ul>
+            <li><strong>Interfészek beállítása:</strong> A GigabitEthernet0/0/1 (Switch felé) és GigabitEthernet0/0/0 (Home Gateway felé) portok megkapták a címzési terv szerinti IP-címeket és a no shutdown paranccsal engedélyezve lettek.</li>
+            <li><strong>DHCP Szerverek:</strong> Két külön DHCP-készlet (pool) lett létrehozva:
+                <ul>
+                    <li>PC-HALOZAT: A 192.168.1.0/24 hálózat számára, a 192.168.1.1-es címet kizárva a kiosztható tartományból.</li>
+                    <li>GATEWAY-HALOZAT: A 192.168.0.0/24 hálózat számára, amely a Home Gateway WAN portját látja el címmel.</li>
+                </ul>
+            </li>
+            <li><strong>Statikus útvonal:</strong> A routernek meg kellett tanítani, hogy az IoT-hálózatot (192.168.25.0/24) a Home Gateway WAN IP-címén keresztül éri el. Ez egy statikus útvonal (ip route 192.168.25.0 255.255.255.0 [gateway_címe]) hozzáadásával történt meg.</li>
+            <li><strong>Alapvető biztonság:</strong> A konfiguráció mentésre került, és jelszavak beállítása javasolt (enable secret, line console, line vty) az illetéktelen hozzáférés megakadályozására.</li>
+        </ul>
+
+        <h2>5. Tesztelés és Hibaelhárítás</h2>
+        <p>A hálózat élesítése során több probléma is felmerült, amelyek módszeres hibakeresést igényeltek. A tesztelés fő célja az végpontok közötti (PC-től IoT-eszközig) kommunikáció ellenőrzése volt a ping parancs segítségével.</p>
+        
+        <p><strong>1. Hiba: A végpontok nem kapnak IP-címet.</strong><br>
+        <strong>Jelenség:</strong> A PC-k és IoT eszközök 169.254.x.x APIPA címet kaptak.<br>
+        <strong>Diagnózis:</strong> A DHCP szerverek nem működtek vagy nem voltak elérhetőek. A Home Gateway-en és a routeren is ellenőrizni kellett a DHCP-beállításokat.<br>
+        <strong>Megoldás:</strong> A Home Gateway GUI-n és a router CLI-ben a DHCP szerverek helyes beállítása és engedélyezése.</p>
+
+        <p><strong>2. Hiba: A PC-k továbbra sem kapnak címet:</strong><br>
+        <strong>Jelenség:</strong> A Switch és a Router közötti kapcsolaton a jelzőfény piros volt.<br>
+        <strong>Diagnózis:</strong> A fizikai összeköttetés hibája. A show ip interface brief parancs a routeren megerősítette, hogy a port administratively down állapotban van, vagy a kábel rossz portba van dugva. A hibakeresés során kiderült, hogy a kábel egy nem konfigurált porthoz csatlakozott.<br>
+        <strong>Megoldás:</strong> A GigabitEthernet0/0/1 porton már volt egy ip cím beállítva így azt elöszőr ki kelelt törölni és utána már műkösött.</p>
+
+        <p><strong>3. Hiba: A PC kap IP-címet, de a ping nem sikeres.</strong><br>
+        <strong>Jelenség:</strong> A PC0 sikeresen kapott címet, de a ping 192.168.25.100 parancsra a válasz a routertől (192.168.1.1) érkezett: Destination host unreachable.<br>
+        <strong>Diagnózis:</strong> A hibaüzenet egyértelműen jelezte, hogy a router nem ismeri az utat a 192.168.25.0/24 hálózat felé. Hiányzott a statikus útvonal.<br>
+        <strong>Megoldás:</strong> A show ip dhcp binding paranccsal kiderítettük a Home Gateway WAN-címét, majd egy statikus útvonalat (ip route...) adtunk a router konfigurációjához, amely erre a címre mutatott.</p>
+        
+        <p>A hibák szisztematikus felderítése és javítása után a végpontok közötti kommunikáció helyreállt, a ping sikeres volt, igazolva a hálózat helyes működését.</p>
+
+        <h2>6. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"A tablet tud kommunikálni a mérő eszközökkel, 2 hálózat van a kettő pc meg tudják egymást pingelni és a tablet is megtudja a mérő műszereket pingelni, van valós 192 vel kezdődő ip címűk. Ez a feladat egy tanulságos feladat volt, nem is volt annyira nehéz, de azért akadtak gondok."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

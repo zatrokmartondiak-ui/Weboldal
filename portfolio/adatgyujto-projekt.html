@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Környezeti Adatgyűjtő</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* HÁTTÉR BEÁLLÍTÁS */
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        ul { margin-left: 20px; margin-bottom: 15px; }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* Görgethető tartály a hosszú képhez */
+        .scroll-container {
+            width: 100%;
+            height: 400px; 
+            overflow-y: auto; 
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #00f3ff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #00f3ff; 
+            border-radius: 4px;
+        }
+
+        /* Wokwi gomb stílusa */
+        .wokwi-btn {
+            display: inline-block;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            border: 1px solid #00f3ff;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+        .wokwi-btn:hover {
+            background: rgba(0, 243, 255, 0.3);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        details {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        details[open] {
+            border-color: #bd00ff;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.1);
+        }
+        summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        summary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: #fff;
+        }
+        summary::after { content: '+'; font-size: 1.2rem; font-weight: bold; }
+        details[open] summary::after { content: '-'; }
+        details[open] summary { background: rgba(189, 0, 255, 0.2); color: #bd00ff; }
+        .digital-content { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.4); }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+            background: #050505;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1);
+            border-left: 4px solid #bd00ff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Környezeti Adatgyűjtő Rendszer</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. Feladat Leírása</h2>
+        <p>RP2040-es mikrovezérlő segítségével kiolvastuk a LDR és DHT11 értékeit, amik fényerőt és hőmérsékletet, valamint páratartalom adatokat mértek, és egy fájlba el is mentik az adatokat. Ezt a projekt feladatot egyedül kellett megcsinálnunk, és az elkészítése nagyjából 3 órát vett igénybe.</p>
+        <p>Kiraktuk az ablakba és elem segítségével működött, ami nem bírta sok ideig, ezért lemerült. Így csak 8 órán át mentette el az adatokat (amit percenként tett meg egyszer), így elég sok adatot kaptam, szépen kivehető a sötétedés mértéke az adatsorban, ahogyan a fényérzékelő mérte a környezeti fényerőt.</p>
+        <p>Mellékesen mértük és mentettük az elem energiaszintjét is. Egy 9 Voltos elemről indultunk, amit 2,2 Voltra korlátoztunk le a feszültségosztóval. Egészen 1,58 Voltig üzemelt a rendszer; ez volt az a pont, amikor 1,58 alatt már nem volt képes menteni a RP2040 mikrovezérlő, és leállt az adatgyűjtéssel. Szóval 2,23 Voltról egészen 1,58 Voltig működött a rendszer stabilan.</p>
+        <p><i>A Wokwi szimulátorban nincs DHT11 csak DHT22 ezért ott az van használva.</i></p>
+
+        <h3>Eredmény: adatfájl</h3>
+        <div class="scroll-container">
+            <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/eredmeny.png" alt="Eredmény Adatfájl" style="width: 100%; display: block;">
+        </div>
+
+        <h2>2. Komponensek, érzékelők</h2>
+        <p>Lyukacsos panelen lett elkészítve, érkezőket kaptunk ugye és a mikrovezérlőt de a többit nekünk kellet megkeresni ugye kellet kondenzátor 2,2 uF-os 10 K és 20 K ellenállás kellet a feszültség osztónak.</p>
+        <ul>
+            <li><strong>Telep:</strong> 9V-os elem</li>
+            <li><strong>Ellenállás:</strong> 10KΩ, 20KΩ</li>
+            <li><strong>Kondenzátor:</strong> 2,2 uf/50V; 2,2 uf/50V</li>
+            <li><strong>DHT11:</strong> Hőmérséklet és páratartalom mérő</li>
+            <li><strong>LDR:</strong> Fényerő mérő szenzor</li>
+            <li><strong>RP2040:</strong> Raspberry Pi RP2040-Zero</li>
+            <li><strong>7805:</strong> Integrált feszültség Stabilizátor</li>
+        </ul>
+
+        <h2>3. Eredmények és vizualizáció</h2>
+        
+        <h3>Wokwi Project:</h3>
+        <a href="https://wokwi.com/projects/426672592736939009" target="_blank" class="wokwi-btn">Wokwi projekt megnyitása</a>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/wokwi_project.png" alt="Wokwi Projekt" class="project-img">
+        
+        <h3>KiCad kapcsolási rajz: (5V-os feszültségosztó)</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/kapcsol%C3%A1si%20rajz.png" alt="Kapcsolási rajz" class="project-img">
+
+        <h3>Az elkészült Projektről a képek:</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/project_kep1.png" alt="Elkészült áramkör 1" class="project-img">
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/project_kep2.png" alt="Elkészült áramkör 2" class="project-img">
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/project_kep3.png" alt="Elkészült áramkör 3" class="project-img">
+
+        <details>
+            <summary>➤ Digitális Tartalom: Programkódok (Python)</summary>
+            <div class="digital-content">
+                <p><strong>Python Kód: (amit a WokWi-ba töltünk bele)</strong></p>
+                <div class="code-snippet">
+import machine
+import utime
+import dht
+
+# Érzékelők inicializálása - DHT11 használata Wokwi kompatibilitás miatt
+dht_sensor = dht.DHT11(machine.Pin(0))
+ldr_adc = machine.ADC(machine.Pin(26))
+
+# RTC inicializálása (Wokwi automatikusan kezeli)
+rtc = machine.RTC()
+rtc.datetime((2025, 3, 5, 0, 8, 30, 0, 0))
+
+def read_sensors():
+    try:
+        dht_sensor.measure()
+        return {
+            'temp': dht_sensor.temperature(),
+            'hum': dht_sensor.humidity(),
+            'light': ldr_adc.read_u16() // 256  # 0-255 skálára konvertálás
+        }
+    except Exception as e:
+        print(f"Érzékelő hiba: {e}")
+        return None
+
+while True:
+    sensor_data = read_sensors()
+   
+    if sensor_data:
+        current_time = rtc.datetime()
+        timestamp = f"{current_time[0]}-{current_time[1]:02}-{current_time[2]:02} {current_time[4]:02}:{current_time[5]:02}:{current_time[6]:02}"
+        data_line = f"{timestamp};{sensor_data['temp']:.1f};{sensor_data['hum']:.1f};{sensor_data['light']}\n"
+       
+        # Adatok mentése és megjelenítése
+        with open("eredmenyek.txt", "a") as f:
+            f.write(data_line)
+        print(data_line.strip())
+   
+    utime.sleep(1)  # 1 másodperc szünet (teszteléshez)
+                </div>
+
+                <p style="margin-top: 20px;"><strong>Python Kód: (amit az RP2040-be töltünk bele)</strong></p>
+                <div class="code-snippet">
+import machine
+from machine import Pin
+import utime
+import dht
+
+klima_sensor = dht.DHT11(Pin(2))
+rtc = machine.RTC()
+rtc.datetime((2025, 3, 19, 0, 10, 30, 15, 0))
+
+fenyerzekelo = machine.ADC(Pin(25))
+feszultseg_meres = machine.ADC(Pin(28))
+
+while True:
+    try:
+        klima_sensor.measure()
+        hofok = klima_sensor.temperature()
+        paratartalom = klima_sensor.humidity()
+       
+        feny = fenyerzekelo.read_u16() // 257
+        feszultseg = feszultseg_meres.read_u16() // 257
+        idopont = rtc.datetime()
+       
+        idobelyeg = f"{idopont[0]}-{idopont[1]:02}-{idopont[2]:02} {idopont[4]:02}:{idopont[5]:02}:{idopont[6]:02}"
+        adat_sor = f"{idobelyeg};{hofok:.1f};{paratartalom:.1f};{feny};{feszultseg}\n"
+        
+        with open("Környezeti_adatok.txt", "a") as fajl:
+            fajl.write(adat_sor)
+        print(adat_sor.strip())
+        
+        utime.sleep(60)
+    except Exception as e:
+        print(f"Rendszerhiba: {e}")
+        utime.sleep(0.6)
+                </div>
+            </div>
+        </details>
+
+        <h2>4. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"A projekt darab tökéletesen működött, és szépen gyűjtötte az adatokat! Szóval sikeres volt de az igénybe vett idő lehetett volna kevesebb is."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

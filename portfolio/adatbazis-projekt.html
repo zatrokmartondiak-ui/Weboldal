@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adatbázis Projekt - Zátrok Márton</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* HÁTTÉR BEÁLLÍTÁS (JAVÍTVA) */
+        body {
+            background-color: #0a0a0a; /* Sötét háttér a transparent helyett */
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        /* Tartalom konténer, hogy a rács felett legyen */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        ul { margin-left: 20px; }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 10px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        details {
+            background: rgba(10, 10, 10, 0.8); /* Kicsit sötétebb háttér */
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        details[open] {
+            border-color: #bd00ff;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.1);
+        }
+        summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        summary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: #fff;
+        }
+        summary::after { content: '+'; font-size: 1.2rem; font-weight: bold; }
+        details[open] summary::after { content: '-'; }
+        details[open] summary { background: rgba(189, 0, 255, 0.2); color: #bd00ff; }
+        .digital-content { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.4); }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 500px;
+            overflow-y: auto;
+            background: #050505;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1);
+            border-left: 4px solid #bd00ff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Automatizált Időjárási Adatok Feldolgozása</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. A projekt célja és feladata</h2>
+        <p>A projektfeladat célja az volt, hogy a <strong>"Mikrovezérlők programozása"</strong> tantárgy keretében elkészített, saját építésű adatgyűjtő eszköz által mért adatokat összevessem egy nyilvánosan elérhető, professzionális légszennyezettség-mérő állomás adataival. Az összehasonlításhoz a Kisgyőr településen található, "Sz-R.cs" azonosítójú <strong>openSenseMap</strong> szenzor adatait használtam.</p>
+        
+        <p><strong>Fő célkitűzések:</strong></p>
+        <ul>
+            <li>Adatok gyűjtése két különböző forrásból (saját és külső).</li>
+            <li>Az összegyűjtött adatok feldolgozása, tisztítása és egységes formátumra hozása.</li>
+            <li>Egy relációs adatbázis megtervezése és létrehozása az adatok strukturált tárolására.</li>
+            <li>Az adatok betöltése az adatbázisba.</li>
+            <li>SQL lekérdezések segítségével az adatok elemzése, statisztikai mutatók (minimum, maximum, átlag) számítása és a két adatsor összevetése.</li>
+            <li>Az eredmények kiértékelése és a teljes folyamat dokumentálása.</li>
+        </ul>
+
+        <h2>2. Technikai megvalósítás</h2>
+        
+        <h3>Adatforrások</h3>
+        <p><strong>1. Saját mérési adatok:</strong> A saját adataimat egy általam épített és programozott mikrovezérlő alapú készülékkel gyűjtöttem (RP2040).</p>
+        <ul>
+            <li>DHT11 szenzor: Hőmérséklet és relatív páratartalom mérő</li>
+            <li>LDR: Fényerő mérő szenzor.</li>
+            <li>Feszültségosztó áramkör: A rendszer tápfeszültségének monitorozása</li>
+        </ul>
+
+        <p><strong>2. Külső adatok (openSenseMap):</strong> A külső referenciaadatok forrása az openSenseMap online adatplatform volt. Az Sz-R.cs azonosítójú kisgyőri szenzorboxból töltöttem le CSV formátumban az alábbi adatokat:</p>
+        <ul>
+            <li>Hőmérséklet (°C)</li>
+            <li>Relatív páratartalom (%)</li>
+            <li>Légnyomás (Pa)</li>
+            <li>PM4.0 szálló por koncentráció (μg/m³)</li>
+            <li>Tápfeszültség (V)</li>
+        </ul>
+        <p>Minden adattípus külön CSV fájlban volt elérhető, createdAt (időbélyeg) és value (mért érték) oszlopokkal.</p>
+
+        <h3>Adatbázis Logikai Terv</h3>
+        <p>Az adatbázis tervezésének alapelve a két eltérő forrásból származó adathalmaz logikai szétválasztása, de egyúttal a hatékony összehasonlíthatóság biztosítása volt.</p>
+        <p>A modell két fő entitásból (táblából) épül fel, melyeket a <strong>Dátum</strong> kapcsol össze:</p>
+        <ul>
+            <li><strong>saját_mérési_adatok:</strong> Datum, Homerseklet, Paratartalom, Fenyero, Feszultseg</li>
+            <li><strong>kulso_forras:</strong> Datum, Legnyomas, Homerseklet, Feszultség, Por_Pollen, Paratartalom</li>
+        </ul>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9p1.png" alt="Adatbázis Logikai Terv" class="project-img">
+
+        <h3>Fizikai megvalósítás és adatfeltöltés</h3>
+        <p>Az adatbázis fizikai létrehozása XAMPP szerverkörnyezetben, a phpMyAdmin adminisztrációs felületén történt. Az adatimportálás legösszetettebb lépése a külső forrásból származó, öt különálló CSV fájl egységes táblába rendezése volt. Ezt a Thonny alkalmazásban megírt Python programokkal oldottam meg.</p>
+
+        <h3>Adatfeldolgozó Python Programok</h3>
+        <p>Az alábbiakban a projekt során használt Python kódok találhatók, amelyekkel az adatok tisztítását, egyesítését és SQL-be való konvertálását végeztem.</p>
+
+        <details>
+            <summary>➤ Python: 5 file és 6 adat összerakás sql file.py</summary>
+            <div class="digital-content">
+                <p>Az elkészült 5 sql filet összerakta 1 darab sql file-ba, importálásra készen. Ez a kód a külső adatokra lett létrehozva.</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import filedialog, messagebox
+import re
+from collections import defaultdict
+import os
+
+def parse_sql_file(file_content, value_column_name_in_file, filename_for_debug="ismeretlen"):
+    data = {}
+    regex_value_first = re.compile(
+        r"INSERT INTO\s+kulso_forras\s*\(\s*" + re.escape(value_column_name_in_file) +
+        r"\s*,\s*Datum\s*\)\s*VALUES\s*\((\d+\.?\d*),\s*'(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})'\);",
+        re.IGNORECASE 
+    )
+    regex_date_first = re.compile(
+        r"INSERT INTO\s+kulso_forras\s*\(\s*Datum\s*,\s*" + re.escape(value_column_name_in_file) +
+        r"\s*\)\s*VALUES\s*\('(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})',\s*(\d+\.?\d*)\);",
+        re.IGNORECASE 
+    )
+
+    lines_investigated_for_insert = 0
+    lines_matched_regex1 = 0
+    lines_matched_regex2 = 0
+    lines_date_filtered_out = 0
+    lines_added_to_data = 0
+
+    for line_num, original_line in enumerate(file_content.splitlines()):
+        line = original_line.strip()
+        if not line.upper().startswith("INSERT INTO"):
+            continue
+        
+        lines_investigated_for_insert += 1
+
+        match = regex_value_first.search(line)
+        if match:
+            lines_matched_regex1 +=1
+            value_str, date_str = match.groups()
+            if date_str.startswith('2025-03-19'):
+                try:
+                    data[date_str] = float(value_str)
+                    lines_added_to_data +=1
+                except ValueError:
+                    print(f"    HIBA(parse): [{filename_for_debug}] Érték konvertálás hiba: '{value_str}' ({date_str}). Sor: {original_line}")
+            else:
+                lines_date_filtered_out +=1
+        else:
+            match = regex_date_first.search(line)
+            if match:
+                lines_matched_regex2 +=1
+                date_str, value_str = match.groups()
+                if date_str.startswith('2025-03-19'):
+                    try:
+                        data[date_str] = float(value_str)
+                        lines_added_to_data +=1
+                    except ValueError:
+                        print(f"    HIBA(parse): [{filename_for_debug}] Érték konvertálás hiba (alt): '{value_str}' ({date_str}). Sor: {original_line}")
+                else:
+                    lines_date_filtered_out +=1
+    
+    if len(data) == 0 and lines_investigated_for_insert > 0 and lines_matched_regex1 == 0 and lines_matched_regex2 == 0:
+         print(f"FIGYELEM A PARSE_SQL_FILE-BAN: [{filename_for_debug}] Egyetlen regex sem illeszkedett a vizsgált {lines_investigated_for_insert} INSERT sorra az oszlopnévvel: '{value_column_name_in_file}'.")
+    return data
+
+
+class SqlFileMergerApp:
+    def __init__(self, master):
+        self.master = master
+        master.title("SQL Fájl Egyesítő")
+        master.geometry("650x300") 
+
+        self.file_paths = {}
+        self.file_labels = {}
+
+        self.data_types_config = {
+            "Homerseklet": {"label": "Hőmérséklet SQL:", "sql_column": "Homerseklet"},
+            "Legnyomas": {"label": "Légnyomás SQL:", "sql_column": "Legnyomas"},
+            "Paratartalom": {"label": "Páratartalom SQL:", "sql_column": "Paratartalom"}, 
+            "Por_Pollen": {"label": "Por/Pollen SQL:", "sql_column": "Por_Pollen"},
+            "Feszultseg_valos": {"label": "Feszültség (valós) SQL:", "sql_column": "Feszultseg"} 
+        }
+
+        row_counter = 0
+        for key, config in self.data_types_config.items():
+            label_widget = tk.Label(master, text=config["label"])
+            label_widget.grid(row=row_counter, column=0, padx=10, pady=5, sticky="w")
+
+            self.file_labels[key] = tk.Label(master, text="Nincs fájl kiválasztva", width=50, anchor="w", relief="sunken", borderwidth=1, padx=2)
+            self.file_labels[key].grid(row=row_counter, column=1, padx=5, pady=5, sticky="ew")
+
+            browse_button = tk.Button(master, text="Tallózás...", command=lambda k=key: self.select_file(k))
+            browse_button.grid(row=row_counter, column=2, padx=5, pady=5)
+            row_counter += 1
+
+        self.merge_button = tk.Button(master, text="Egyesítés és Mentés", command=self.process_files, height=2)
+        self.merge_button.grid(row=row_counter, column=0, columnspan=3, pady=15, padx=10, sticky="ew")
+
+        self.status_label = tk.Label(master, text="Válassza ki az 5 SQL fájlt.", fg="blue", wraplength=600)
+        self.status_label.grid(row=row_counter + 1, column=0, columnspan=3, pady=5, padx=10, sticky="ew")
+
+        master.grid_columnconfigure(1, weight=1)
+
+    def select_file(self, file_type_key):
+        filepath = filedialog.askopenfilename(
+            title=f"Válaszd ki a {self.data_types_config[file_type_key]['label'].replace(' SQL:', '')} fájlt",
+            filetypes=(("SQL fájlok", "*.sql"), ("Minden fájl", "*.*"))
+        )
+        if filepath:
+            self.file_paths[file_type_key] = filepath
+            self.file_labels[file_type_key].config(text=os.path.basename(filepath))
+            self.status_label.config(text=f"{os.path.basename(filepath)} kiválasztva.", fg="blue")
+        else:
+            self.file_paths.pop(file_type_key, None)
+            self.file_labels[file_type_key].config(text="Nincs fájl kiválasztva")
+            self.status_label.config(text="Fájlválasztás megszakítva.", fg="orange")
+
+
+    def process_files(self):
+        self.status_label.config(text="Feldolgozás indítása...", fg="orange")
+        self.master.update_idletasks()
+
+        if len(self.file_paths) < len(self.data_types_config):
+            messagebox.showerror("Hiányzó fájlok", f"Kérlek, válaszd ki mind a {len(self.data_types_config)} SQL fájlt!")
+            self.status_label.config(text="Hiányzó fájlok! Válassz ki minden szükséges fájlt.", fg="red")
+            return
+
+        all_parsed_data = {}
+        found_data_counts = {} 
+        any_file_issue = False
+
+        print("\n--- Fájlok feldolgozása indul (javított oszlopnévvel a Páratartalomhoz) ---")
+        for key, config in self.data_types_config.items():
+            filepath = self.file_paths.get(key)
+            if not filepath:
+                 messagebox.showerror("Hiba", f"A(z) \"{config['label'].replace(' SQL:', '')}\" fájl nincs kiválasztva.")
+                 self.status_label.config(text=f"Hiba: \"{config['label'].replace(' SQL:', '')}\" fájl hiányzik.", fg="red")
+                 any_file_issue = True
+                 break 
+            try:
+                filename_short = os.path.basename(filepath)
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                print(f"Fájl olvasása és parse indítása: {filename_short} (Kulcs: {key}, Keresett SQL oszlop: '{config['sql_column']}')")
+                parsed_data_for_key = parse_sql_file(content, config["sql_column"], filename_for_debug=filename_short) 
+                all_parsed_data[key] = parsed_data_for_key
+                found_data_counts[key] = len(parsed_data_for_key)
+
+            except Exception as e:
+                messagebox.showerror("Fájl olvasási/feldolgozási hiba", f"Hiba a(z) {os.path.basename(filepath)} fájl olvasása vagy feldolgozása közben: {e}")
+                self.status_label.config(text=f"Hiba: {os.path.basename(filepath)} olvasása/feldolgozása sikertelen.", fg="red")
+                any_file_issue = True
+                break 
+        
+        if any_file_issue:
+            print("--- Feldolgozás megszakadt egy fájlhiba miatt. ---")
+            return
+
+        file_data_summary_lines = []
+        all_files_have_min_one_data = True 
+        for key_conf, count in found_data_counts.items(): 
+            file_label = self.data_types_config[key_conf]['label'].replace(' SQL:', '')
+            file_name_short = os.path.basename(self.file_paths.get(key_conf, 'N/A'))
+            sql_col_name = self.data_types_config[key_conf]['sql_column']
+            file_data_summary_lines.append(f"- {file_label} ('{file_name_short}', oszlop: '{sql_col_name}'): {count} db '2025-03-19' adat")
+            if count == 0: 
+                all_files_have_min_one_data = False 
+        
+        data_summary_for_messagebox = "\n".join(file_data_summary_lines)
+        print("\n--- GUI Összegzés (fájlonként talált '2025-03-19' adatok) ---")
+        print(data_summary_for_messagebox)
+        print("-------------------------------------------------------------")
+
+        if not all_files_have_min_one_data: 
+            self.status_label.config(text="Egy vagy több fájl nem tartalmazott feldolgozható '2025-03-19' adatot.", fg="red")
+            messagebox.showwarning("Feldolgozási Hiba", 
+                                   f"Egy vagy több fájl nem tartalmazott feldolgozható '2025-03-19' dátumú adatot, vagy a formátum nem megfelelő.\n\nEllenőrizd a konzol kimenetét (fentebb a parse_sql_file logokat) és a fájlokat!\n\nRészletek:\n{data_summary_for_messagebox}")
+            return
+        
+        list_of_data_dictionaries = [all_parsed_data[key] for key in self.data_types_config.keys() if key in all_parsed_data]
+
+        if len(list_of_data_dictionaries) < len(self.data_types_config):
+            self.status_label.config(text="Kritikus hiba: Nem minden adatforrás került feldolgozásra a közösítés előtt.", fg="red")
+            messagebox.showerror("Belső Hiba", "Nem minden adatforrás került feldolgozásra a közösítés előtt. Ellenőrizd a konzolt.")
+            return
+
+        common_dates = set(list_of_data_dictionaries[0].keys())
+        for data_dict in list_of_data_dictionaries[1:]:
+            common_dates.intersection_update(data_dict.keys())
+        
+        relevant_dates = sorted(list(common_dates)) 
+
+        if not relevant_dates:
+            self.status_label.config(text="Nincsenek KÖZÖS '2025-03-19' dátumok a fájlok között.", fg="red")
+            messagebox.showinfo("Nincs közös adat", f"Nem találhatóak közös, '2025-03-19' dátummal rendelkező adatsorok az ÖSSZES kiválasztott fájlban.\n\nFájlonkénti adatok ('2025-03-19' szűréssel):\n{data_summary_for_messagebox}")
+            return
+        
+        print(f"\nTalált közös, feldolgozható dátumok ('2025-03-19') száma: {len(relevant_dates)}")
+        if relevant_dates:
+            print(f"Első néhány közös dátum: {relevant_dates[:5]}")
+
+        aggregated_data = defaultdict(dict)
+        for date_str in relevant_dates:
+            aggregated_data[date_str]["Por_Pollen"] = all_parsed_data["Por_Pollen"].get(date_str)
+            aggregated_data[date_str]["Paratartalom"] = all_parsed_data["Paratartalom"].get(date_str)
+            aggregated_data[date_str]["Legnyomas"] = all_parsed_data["Legnyomas"].get(date_str)
+            aggregated_data[date_str]["Homerseklet"] = all_parsed_data["Homerseklet"].get(date_str)
+            aggregated_data[date_str]["Feszultseg"] = all_parsed_data["Feszultseg_valos"].get(date_str)
+
+        output_sql_lines = []
+        required_output_keys = ["Por_Pollen", "Paratartalom", "Legnyomas", "Homerseklet", "Feszultseg"]
+        for date_str in sorted(aggregated_data.keys()):
+            data_for_date = aggregated_data[date_str]
+            if all(key in data_for_date and data_for_date[key] is not None for key in required_output_keys):
+                line = (f"INSERT INTO kulso_forras (Por_Pollen, Paratartalom, Legnyomas, Homerseklet, Feszultseg, Datum) "
+                        f"VALUES ({data_for_date['Por_Pollen']:.2f}, {data_for_date['Paratartalom']:.2f}, {data_for_date['Legnyomas']:.2f}, "
+                        f"{data_for_date['Homerseklet']:.2f}, {data_for_date['Feszultseg']:.2f}, '{date_str}');")
+                output_sql_lines.append(line)
+
+        if not output_sql_lines:
+            self.status_label.config(text="Nem generálódtak SQL sorok. Ellenőrizd a közös dátumokat és adatokat.", fg="red")
+            messagebox.showwarning("Nincs kimenet", f"Nem sikerült összefésülhető adatokat találni a megadott feltételekkel, bár közös dátumok ({len(relevant_dates)} db) voltak.\nLehet, hogy valamelyik közös dátumhoz hiányzott egy adatpont.\n\nFájlonkénti adatok:\n{data_summary_for_messagebox}")
+            return
+
+        output_filename = "egyesitett_adatok.sql"
+        try:
+            with open(output_filename, "w", encoding="utf-8") as outfile:
+                for line in output_sql_lines:
+                    outfile.write(line + "\n")
+            
+            self.status_label.config(text=f"'{output_filename}' sikeresen létrehozva ({len(output_sql_lines)} sor).", fg="green")
+            messagebox.showinfo("Siker", f"Az egyesített SQL parancsok kiírva a(z) '{output_filename}' fájlba.\nÖsszesen {len(output_sql_lines)} SQL INSERT utasítás generálva.")
+            print(f"\nAz egyesített SQL parancsok kiírva a(z) '{output_filename}' fájlba. ({len(output_sql_lines)} sor)")
+        except Exception as e:
+            messagebox.showerror("Mentési hiba", f"Hiba történt az '{output_filename}' fájl mentése közben: {e}")
+            self.status_label.config(text="Hiba a fájl mentésekor!", fg="red")
+            print(f"HIBA a fájl mentésekor: {e}")
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = SqlFileMergerApp(root)
+    root.mainloop()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: csv adatból sql.py</summary>
+            <div class="digital-content">
+                <p>Beolvas egy feldolgozott csv adatfájlt, és SQL INSERT utasításokat generál belőle. Ez a kód a külső adatokra lett létrehozva.</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import filedialog
+import csv
+from datetime import datetime
+
+def csv_to_sql():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename(
+        title="Válaszd ki a CSV fájlt",
+        filetypes=[("CSV fájlok", "*.csv")]
+    )
+
+    if not file_path:
+        print("Nem választottál ki fájlt.")
+        return
+
+    output_path = file_path.rsplit(".", 1)[0] + ".sql"
+    table_name = "kulso_forras"  # már meglévő tábla
+    field_temp = "Feszultseg"  # hőmérséklet oszlop neve a táblában
+    field_time = "Datum"        # időbélyeg oszlop neve a táblában
+    database_name = "project_munka"
+
+    with open(file_path, newline='', encoding='utf-8') as csvfile, open(output_path, 'w', encoding='utf-8') as sqlfile:
+        reader = csv.DictReader(csvfile)
+
+        sqlfile.write(f"USE {database_name};\n\n")
+
+        for row in reader:
+            value = row['value']
+            created_at_raw = row['createdAt']
+
+            try:
+                created_at = datetime.fromisoformat(created_at_raw.replace("Z", "+00:00"))
+                created_at_str = created_at.strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                print(f"Hibás időformátum: {created_at_raw}")
+                continue
+
+            sql = (
+                f"INSERT INTO {table_name} ({field_temp}, {field_time}) "
+                f"VALUES ({value}, '{created_at_str}');\n"
+            )
+            sqlfile.write(sql)
+
+    print(f"Sikeresen elkészült: {output_path}")
+
+csv_to_sql()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: csv file time adat szabályzó.py</summary>
+            <div class="digital-content">
+                <p>A megadott Python program egy CSV fájlban tárolt időbélyeggel ellátott adatokat dolgoz fel, és egy új, megtisztított és kiegészített CSV fájlt hoz létre. Célja: Időbélyegek normalizálása, hiányzó percek pótlása.</p>
+                <div class="code-snippet">
+import csv
+from datetime import datetime, timedelta
+import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+
+def parse_timestamp(ts_str):
+    """
+    Időbélyeg string feldolgozása datetime objektummá.
+    Támogatja az ISO 8601 formátumot (pl. '2024-03-10T21:15:34.078Z').
+    """
+    try:
+        if ts_str.endswith('Z'):
+            return datetime.fromisoformat(ts_str[:-1] + '+00:00')
+        else:
+            return datetime.fromisoformat(ts_str)
+    except ValueError:
+        try:
+            return datetime.strptime(ts_str, "%Y-%m-%d %H:%M:%S.%f")
+        except ValueError:
+            try:
+                return datetime.strptime(ts_str, "%Y-%m-%dT%H:%M") # Ha csak óra:perc van T-vel
+            except ValueError:
+                 print(f"Figyelmeztetés: Nem sikerült feldolgozni az időbélyeget: {ts_str}")
+                 return None
+
+def format_timestamp(dt_obj):
+    """
+    Datetime objektum formázása ISO 8601 stringgé, másodpercek nélkül (00), UTC jelöléssel.
+    """
+    return dt_obj.strftime("%Y-%m-%dT%H:%M:00Z")
+
+def process_csv(input_filepath, output_filepath):
+    """
+    Feldolgozza a bemeneti CSV fájlt és létrehozza a kimeneti CSV-t a megadott logika szerint.
+    Az értékeket két tizedesjegyre kerekíti.
+    """
+    data = []
+    
+    try:
+        with open(input_filepath, mode='r', newline='', encoding='utf-8') as infile:
+            reader = csv.DictReader(infile)
+            
+            if 'createdAt' not in reader.fieldnames or 'value' not in reader.fieldnames:
+                print("Hiba: A CSV fájlnak tartalmaznia kell 'createdAt' és 'value' oszlopokat.")
+                return False
+
+            for row_number, row in enumerate(reader, 1):
+                timestamp_str = row.get('createdAt')
+                value_str = row.get('value')
+
+                if timestamp_str is None or value_str is None:
+                    print(f"Figyelmeztetés (sor {row_number}): Sor kihagyva hiányzó 'createdAt' vagy 'value' miatt: {row}")
+                    continue
+
+                dt_obj = parse_timestamp(timestamp_str)
+                if dt_obj:
+                    try:
+                        value = float(value_str)
+                        dt_obj_minute = dt_obj.replace(second=0, microsecond=0)
+                        data.append({'timestamp': dt_obj_minute, 'value': value}) # Eredeti érték mentése itt
+                    except ValueError:
+                        print(f"Figyelmeztetés (sor {row_number}): Nem sikerült a '{value_str}' értéket számmá alakítani. Sor kihagyva: {row}")
+                        continue
+                else:
+                    print(f"Figyelmeztetés (sor {row_number}): Sor kihagyva feldolgozhatatlan időbélyeg ({timestamp_str}) miatt: {row}")
+
+    except FileNotFoundError:
+        print(f"Hiba: A bemeneti fájl nem található itt: {input_filepath}")
+        return False
+    except Exception as e:
+        print(f"Hiba történt a CSV olvasása közben: {e}")
+        return False
+
+    if not data:
+        print("Nem sikerült érvényes adatot olvasni a CSV fájlból, vagy a fájl üres volt.")
+        return False
+
+    data.sort(key=lambda x: x['timestamp'])
+
+    # --- Adatok aggregálása percenként (ha több érték esik ugyanarra a percre) ---
+    aggregated_data_by_minute = {}
+    for item in data:
+        ts = item['timestamp']
+        val = item['value']
+        if ts not in aggregated_data_by_minute:
+            aggregated_data_by_minute[ts] = {'sum_value': 0, 'count': 0}
+        aggregated_data_by_minute[ts]['sum_value'] += val
+        aggregated_data_by_minute[ts]['count'] += 1
+    
+    unique_minute_data = []
+    for ts in sorted(aggregated_data_by_minute.keys()):
+        aggregates = aggregated_data_by_minute[ts]
+        average_value = aggregates['sum_value'] / aggregates['count']
+        # KEREKÍTÉS ITT
+        unique_minute_data.append({'timestamp': ts, 'value': round(average_value, 2)}) 
+        
+    data = unique_minute_data
+
+    # --- Hiányzó percek pótlása ---
+    filled_data = []
+    if not data:
+        print("Nincs feldolgozandó adat az aggregálás után.")
+        return False
+
+    i = 0
+    while i < len(data):
+        current_point = data[i] # Ennek az értéke ('value') már kerekített
+        filled_data.append(current_point)
+
+        if i + 1 < len(data):
+            next_point = data[i+1] # Ennek az értéke ('value') is már kerekített
+            time_diff_seconds = (next_point['timestamp'] - current_point['timestamp']).total_seconds()
+            time_diff_minutes = time_diff_seconds / 60
+
+            if time_diff_minutes > 1.000001: 
+                num_missing_minutes = int(round(time_diff_minutes)) - 1
+                
+                if num_missing_minutes > 0 :
+                    val_before = current_point['value'] 
+                    val_after = next_point['value']   
+                    avg_value_for_gap = (val_before + val_after) / 2
+                    # KEREKÍTÉS ITT A PÓTOLT ÉRTÉKRE
+                    rounded_avg_value_for_gap = round(avg_value_for_gap, 2)
+
+                    for j in range(1, num_missing_minutes + 1):
+                        missing_timestamp = current_point['timestamp'] + timedelta(minutes=j)
+                        filled_data.append({'timestamp': missing_timestamp, 'value': rounded_avg_value_for_gap})
+        i += 1
+    
+    if not filled_data:
+        print("Nincs adat a kimeneti fájlba íráshoz a kitöltési folyamat után.")
+        return False
+
+    try:
+        with open(output_filepath, mode='w', newline='', encoding='utf-8') as outfile:
+            output_fieldnames = ['createdAt', 'value'] 
+            writer = csv.DictWriter(outfile, fieldnames=output_fieldnames)
+            writer.writeheader()
+            for row_dict in filled_data:
+                output_row = {
+                    'createdAt': format_timestamp(row_dict['timestamp']),
+                    'value': row_dict['value'] 
+                }
+                writer.writerow(output_row)
+        print(f"Feldolgozott adatok sikeresen kiírva ide: {output_filepath}")
+        return True
+    except Exception as e:
+        print(f"Hiba történt a CSV írása közben: {e}")
+        return False
+
+if __name__ == "__main__":
+    root = Tk()
+    root.withdraw() 
+
+    input_csv_file = askopenfilename(
+        title="Válassz egy CSV fájlt a feldolgozáshoz",
+        filetypes=[("CSV fájlok", "*.csv"), ("Minden fájl", "*.*")]
+    )
+    
+    if not input_csv_file:
+        print("Nem választottál ki bemeneti fájlt. A program leáll.")
+    else:
+        input_directory = os.path.dirname(input_csv_file)
+        input_filename_base, input_filename_ext = os.path.splitext(os.path.basename(input_csv_file))
+        
+        output_filename_base = f"{input_filename_base}_feldolgozott"
+        output_csv_file = os.path.join(input_directory, f"{output_filename_base}{input_filename_ext}")
+        
+        print(f"Bemeneti fájl: {input_csv_file}")
+        print(f"Kimeneti fájl mentése ide: {output_csv_file}")
+        
+        process_csv(input_csv_file, output_csv_file)
+    
+    if 'root' in locals() and root.winfo_exists():
+         root.destroy()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: idő pótlás 2.py</summary>
+            <div class="digital-content">
+                <p>Beolvassa az SQL fájlt és kinyeri az adatokat (Feszültség, Dátum). Kitölti a hiányzó perceket az adatokban interpolációval.</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import filedialog, scrolledtext, messagebox
+from datetime import datetime, timedelta
+import re
+import os
+
+def parse_sql_file(file_path):
+    """
+    Beolvassa az SQL fájlt és kinyeri az adatokat (Feszültség, Dátum).
+    """
+    data = []
+    table_name = "kulso_forras" # Meghatározva a fájl struktúrája alapján
+
+    insert_pattern = re.compile(
+        r"INSERT INTO " + re.escape(table_name) + r" \(Feszultseg, Datum\) VALUES "
+        r"\(([\d\.]+), '(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})'\);"
+    )
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                match = insert_pattern.search(line)
+                if match:
+                    feszultseg_str = match.group(1)
+                    datum_str_full = match.group(2) # YYYY-MM-DD HH:MM:SS
+                    try:
+                        feszultseg = float(feszultseg_str)
+                        datum_obj_full = datetime.strptime(datum_str_full, '%Y-%m-%d %H:%M:%S')
+                        datum_obj_minute_precision = datum_obj_full.replace(second=0, microsecond=0)
+
+                        data.append({
+                            'Datum': datum_obj_minute_precision, 
+                            'OriginalDatumStr': datum_str_full, 
+                            'Feszultseg': feszultseg
+                        })
+                    except ValueError as e:
+                        error_msg = f"Hiba az adatkonverzió során: Érték: {feszultseg_str}, Dátum: {datum_str_full} - {e}\nSor: {line.strip()}\n"
+                        print(error_msg)
+                        continue
+    except FileNotFoundError:
+        messagebox.showerror("Hiba", f"A fájl nem található: {file_path}")
+        return [], None
+    except Exception as e:
+        messagebox.showerror("Hiba", f"Hiba történt a fájl olvasása közben: {e}")
+        return [], None
+
+    data.sort(key=lambda x: x['Datum'])
+    
+    unique_minute_data = []
+    seen_minutes = set()
+    for record in data:
+        if record['Datum'] not in seen_minutes:
+            unique_minute_data.append(record)
+            seen_minutes.add(record['Datum'])
+
+    return unique_minute_data, table_name
+
+def fill_missing_data(data):
+    """
+    Kitölti a hiányzó perceket az adatokban interpolációval (csak Feszültség).
+    """
+    if not data:
+        return []
+
+    filled_data = []
+    if data:
+        first_point = data[0].copy()
+        if 'Interpolated' not in first_point: 
+             first_point['OriginalDatumStr'] = first_point.get('OriginalDatumStr', first_point['Datum'].strftime('%Y-%m-%d %H:%M:00'))
+        filled_data.append(first_point)
+
+
+    for i in range(len(data) - 1):
+        prev_point_in_filled = filled_data[-1]
+        
+        original_next_point = data[i+1].copy()
+        if 'Interpolated' not in original_next_point:
+            original_next_point['OriginalDatumStr'] = original_next_point.get('OriginalDatumStr', original_next_point['Datum'].strftime('%Y-%m-%d %H:%M:00'))
+
+        current_time = prev_point_in_filled['Datum'] 
+        next_original_time = original_next_point['Datum'] 
+
+        time_diff_minutes = int((next_original_time - current_time).total_seconds() / 60)
+
+        if time_diff_minutes > 1:
+            for minute_offset in range(1, time_diff_minutes):
+                missing_time = current_time + timedelta(minutes=minute_offset)
+                
+                total_gap_for_interpolation = time_diff_minutes
+                
+                weight_next = minute_offset / total_gap_for_interpolation
+                weight_prev = 1.0 - weight_next
+
+                avg_feszultseg = prev_point_in_filled['Feszultseg'] * weight_prev + original_next_point['Feszultseg'] * weight_next
+                
+                new_interpolated_point = {
+                    'Datum': missing_time,
+                    'Feszultseg': round(avg_feszultseg, 2), 
+                    'Interpolated': True,
+                    'OriginalDatumStr': missing_time.strftime('%Y-%m-%d %H:%M:00') 
+                }
+                filled_data.append(new_interpolated_point)
+        
+        if not filled_data or filled_data[-1]['Datum'] < original_next_point['Datum']:
+             filled_data.append(original_next_point)
+
+
+    final_unique_data = []
+    seen_dates = set()
+    for item in filled_data:
+        if item['Datum'] not in seen_dates:
+            final_unique_data.append(item)
+            seen_dates.add(item['Datum'])
+            
+    final_unique_data.sort(key=lambda x: x['Datum'])
+    return final_unique_data
+
+
+def save_data_to_sql(data, output_file_path, table_name):
+    """
+    A feldolgozott adatokat SQL INSERT utasításokként menti egy fájlba.
+    """
+    if not data:
+        messagebox.showwarning("Mentés", "Nincs adat a mentéshez.")
+        return False
+
+    try:
+        with open(output_file_path, 'w', encoding='utf-8') as f:
+            f.write(f"-- SQL INSERT utasítások a '{table_name}' táblához\n")
+            f.write(f"-- Generálva: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("-- Ez a fájl tartalmazhat interpolált adatokat.\n")
+            f.write(f"USE project_munka;\n\n") 
+
+            for row in data:
+                datum_str_to_save = row.get('OriginalDatumStr', row['Datum'].strftime('%Y-%m-%d %H:%M:00'))
+                if row.get('Interpolated'): 
+                    datum_str_to_save = row['Datum'].strftime('%Y-%m-%d %H:%M:00')
+
+                sql_insert = (
+                    f"INSERT INTO {table_name} (Feszultseg, Datum) "
+                    f"VALUES ({row['Feszultseg']:.2f}, '{datum_str_to_save}');\n"
+                )
+                f.write(sql_insert)
+        messagebox.showinfo("Mentés Sikeres", f"Az adatok sikeresen elmentve ide: {output_file_path}")
+        return True
+    except Exception as e:
+        messagebox.showerror("Mentési Hiba", f"Hiba történt a fájl mentése közben: {e}")
+        return False
+
+def process_data():
+    """
+    Fájl kiválasztása, adatok feldolgozása, megjelenítése és mentése.
+    """
+    global result_text
+
+    file_path = filedialog.askopenfilename(
+        title="Válassz SQL fájlt a beolvasáshoz",
+        filetypes=(("SQL fájlok", "*.sql"), ("Szöveges fájlok", "*.txt"), ("Minden fájl", "*.*"))
+    )
+    if not file_path:
+        return
+
+    result_text.config(state=tk.NORMAL)
+    result_text.delete(1.0, tk.END)
+
+    raw_data, table_name = parse_sql_file(file_path)
+
+    if not raw_data:
+        if table_name is None:
+             result_text.insert(tk.END, "Nem sikerült adatokat beolvasni a fájlból.\n")
+        else:
+             result_text.insert(tk.END, "A beolvasott fájl nem tartalmaz érvényes adatokat vagy üres.\n")
+        result_text.config(state=tk.DISABLED)
+        return
+
+    result_text.insert(tk.END, f"Beolvasott (egyedi percenkénti) adatok száma: {len(raw_data)}\n")
+    result_text.insert(tk.END, f"Felismert/használt táblanév: {table_name}\nFeldolgozás...\n")
+    root.update_idletasks()
+
+    filled_data = fill_missing_data(raw_data)
+
+    result_text.insert(tk.END, "\nEredeti és kiegészített adatok:\n")
+    result_text.insert(tk.END, "================================\n")
+    for row in filled_data:
+        datum_display_str = row['Datum'].strftime('%Y-%m-%d %H:%M')
+        interpolated_mark = " (interpolált)" if row.get('Interpolated') else ""
+        
+        result_text.insert(tk.END,
+                           f"Dátum: {datum_display_str}, "
+                           f"Feszültség: {row['Feszultseg']:.2f}"
+                           f"{interpolated_mark}\n")
+    result_text.config(state=tk.DISABLED)
+    root.update_idletasks()
+
+    output_file_path = filedialog.asksaveasfilename(
+        title="Feldolgozott adatok mentése SQL fájlként",
+        defaultextension=".sql",
+        filetypes=(("SQL fájlok", "*.sql"), ("Minden fájl", "*.*")),
+        initialfile=f"{os.path.splitext(os.path.basename(file_path))[0]}_kiegeszitett.sql"
+    )
+
+    if output_file_path:
+        if save_data_to_sql(filled_data, output_file_path, table_name):
+            result_text.config(state=tk.NORMAL)
+            result_text.insert(tk.END, f"\nAdatok sikeresen mentve: {output_file_path}\n")
+            result_text.config(state=tk.DISABLED)
+    else:
+        messagebox.showinfo("Mentés", "A mentés megszakítva.")
+        result_text.config(state=tk.NORMAL)
+        result_text.insert(tk.END, "\nA mentési folyamat megszakítva.\n")
+        result_text.config(state=tk.DISABLED)
+
+
+root = tk.Tk()
+root.title("Adatfeldolgozó és Kiegészítő (Külső Forrás)")
+root.geometry("800x600")
+
+process_button = tk.Button(root, text="SQL Fájl feldolgozása és mentése", command=process_data, padx=10, pady=10, bg="#D6EAF8", font=("Arial", 12))
+process_button.pack(pady=20)
+
+result_text_frame = tk.Frame(root)
+result_text_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+result_text = scrolledtext.ScrolledText(result_text_frame, wrap=tk.WORD, state=tk.DISABLED, height=25, width=100, font=("Courier New", 10))
+result_text.pack(fill=tk.BOTH, expand=True)
+
+root.mainloop()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: időhiány pótlása.py</summary>
+            <div class="digital-content">
+                <p>Beolvassa az SQL fájlt és kinyeri az adatokat. Kitölti a hiányzó perceket az adatokban interpolációval. Ez a kód a saját mérési adataimra lett létrehozva.</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import filedialog, scrolledtext, messagebox
+from datetime import datetime, timedelta
+import re
+import os 
+
+def parse_sql_file(file_path):
+    """
+    Beolvassa az SQL fájlt és kinyeri az adatokat.
+    Feltételezi, hogy az INSERT utasítások a megadott formátumban vannak.
+    """
+    data = []
+    table_name_search = re.search(r"INSERT INTO (\w+)", "".join(open(file_path, 'r', encoding='utf-8').readlines()[:5])) 
+    table_name = table_name_search.group(1) if table_name_search else "sajat_meresi_adatok" 
+
+    insert_pattern = re.compile(
+        r"INSERT INTO " + re.escape(table_name) + r" \(Datum, Homerseklet, Paratartalom, Fenyero, Feszultseg\) VALUES "
+        r"\('(\d{4}-\d{2}-\d{2} \d{2}:\d{2})', ([\d\.-]+), ([\d\.-]+), ([\d-]+), ([\d-]+)\);"
+    )
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                match = insert_pattern.search(line)
+                if match:
+                    datum_str = match.group(1)
+                    try:
+                        homerseklet = float(match.group(2))
+                        paratartalom = float(match.group(3))
+                        fenyero = int(match.group(4))
+                        feszultseg = int(match.group(5))
+                        datum_obj = datetime.strptime(datum_str, '%Y-%m-%d %H:%M')
+                        data.append({
+                            'Datum': datum_obj,
+                            'Homerseklet': homerseklet,
+                            'Paratartalom': paratartalom,
+                            'Fenyero': fenyero,
+                            'Feszultseg': feszultseg
+                        })
+                    except ValueError as e:
+                        print(f"Hiba az adatkonverzió során a következő sornál: {line.strip()} - {e}")
+                        if 'result_text' in globals() and result_text:
+                             result_text.insert(tk.END, f"Figyelmeztetés: Hibás adat a bemeneti fájlban (kihagyva): {datum_str} - {e}\n")
+                        continue 
+    except FileNotFoundError:
+        messagebox.showerror("Hiba", f"A fájl nem található: {file_path}")
+        return [], None
+    except Exception as e:
+        messagebox.showerror("Hiba", f"Hiba történt a fájl olvasása közben: {e}")
+        return [], None
+
+    data.sort(key=lambda x: x['Datum'])
+    return data, table_name
+
+def fill_missing_data(data):
+    """
+    Kitölti a hiányzó perceket az adatokban interpolációval.
+    """
+    if not data:
+        return []
+
+    filled_data = []
+    if data:
+        filled_data.append(data[0]) 
+
+    for i in range(len(data) - 1):
+        prev_point = filled_data[-1]
+        next_point = data[i+1]
+
+        current_time = prev_point['Datum']
+        next_time = next_point['Datum']
+
+        time_diff_minutes = int((next_time - current_time).total_seconds() / 60)
+
+        if time_diff_minutes > 1:
+            for minute_offset in range(1, time_diff_minutes):
+                missing_time = current_time + timedelta(minutes=minute_offset)
+                
+                original_prev_point_for_gap = data[i]
+                original_next_point_for_gap = data[i+1]
+                
+                actual_gap_minutes = int((original_next_point_for_gap['Datum'] - original_prev_point_for_gap['Datum']).total_seconds() / 60)
+                
+                offset_from_original_prev = int((missing_time - original_prev_point_for_gap['Datum']).total_seconds() / 60)
+
+                if actual_gap_minutes == 0: 
+                    weight_prev = 0.5
+                    weight_next = 0.5
+                else:
+                    weight_next = offset_from_original_prev / actual_gap_minutes
+                    weight_prev = 1.0 - weight_next
+
+
+                avg_homerseklet = original_prev_point_for_gap['Homerseklet'] * weight_prev + original_next_point_for_gap['Homerseklet'] * weight_next
+                avg_paratartalom = original_prev_point_for_gap['Paratartalom'] * weight_prev + original_next_point_for_gap['Paratartalom'] * weight_next
+                avg_fenyero = round(original_prev_point_for_gap['Fenyero'] * weight_prev + original_next_point_for_gap['Fenyero'] * weight_next)
+                avg_feszultseg = round(original_prev_point_for_gap['Feszultseg'] * weight_prev + original_next_point_for_gap['Feszultseg'] * weight_next)
+
+                filled_data.append({
+                    'Datum': missing_time,
+                    'Homerseklet': round(avg_homerseklet, 1),
+                    'Paratartalom': round(avg_paratartalom, 1),
+                    'Fenyero': avg_fenyero,
+                    'Feszultseg': avg_feszultseg,
+                    'Interpolated': True
+                })
+        filled_data.append(next_point) 
+
+    final_unique_data = []
+    seen_dates = set()
+    for item in filled_data:
+        if item['Datum'] not in seen_dates:
+            final_unique_data.append(item)
+            seen_dates.add(item['Datum'])
+    
+    final_unique_data.sort(key=lambda x: x['Datum']) 
+    return final_unique_data
+
+def save_data_to_sql(data, output_file_path, table_name):
+    """
+    A feldolgozott adatokat SQL INSERT utasításokként menti egy fájlba.
+    """
+    if not data:
+        messagebox.showwarning("Mentés", "Nincs adat a mentéshez.")
+        return False
+
+    try:
+        with open(output_file_path, 'w', encoding='utf-8') as f:
+            f.write(f"-- SQL INSERT utasítások a '{table_name}' táblához\n")
+            f.write(f"-- Generálva: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("-- Ez a fájl tartalmazhat interpolált adatokat.\n\n")
+
+            for row in data:
+                datum_str = row['Datum'].strftime('%Y-%m-%d %H:%M')
+                sql_insert = (
+                    f"INSERT INTO {table_name} (Datum, Homerseklet, Paratartalom, Fenyero, Feszultseg) "
+                    f"VALUES ('{datum_str}', {row['Homerseklet']:.1f}, {row['Paratartalom']:.1f}, "
+                    f"{row['Fenyero']}, {row['Feszultseg']});\n"
+                )
+                f.write(sql_insert)
+        messagebox.showinfo("Mentés Sikeres", f"Az adatok sikeresen elmentve ide: {output_file_path}")
+        return True
+    except Exception as e:
+        messagebox.showerror("Mentési Hiba", f"Hiba történt a fájl mentése közben: {e}")
+        return False
+
+def process_data():
+    """
+    Fájl kiválasztása, adatok feldolgozása, megjelenítése és mentése.
+    """
+    global result_text 
+
+    file_path = filedialog.askopenfilename(
+        title="Válassz SQL fájlt a beolvasáshoz",
+        filetypes=(("SQL fájlok", "*.sql"), ("Szöveges fájlok", "*.txt"), ("Minden fájl", "*.*"))
+    )
+    if not file_path:
+        return
+
+    result_text.config(state=tk.NORMAL)
+    result_text.delete(1.0, tk.END) 
+
+    raw_data, table_name = parse_sql_file(file_path)
+
+    if not raw_data:
+        if table_name is None: 
+             result_text.insert(tk.END, "Nem sikerült adatokat beolvasni a fájlból.\n")
+        else: 
+             result_text.insert(tk.END, "A beolvasott fájl nem tartalmaz érvényes adatokat vagy üres.\n")
+        result_text.config(state=tk.DISABLED)
+        return
+
+    result_text.insert(tk.END, f"Beolvasott adatok száma: {len(raw_data)}\n")
+    result_text.insert(tk.END, f"Felismert táblanév: {table_name}\nFeldolgozás...\n")
+    root.update_idletasks() 
+
+    filled_data = fill_missing_data(raw_data)
+
+    result_text.insert(tk.END, "\nEredeti és kiegészített adatok:\n")
+    result_text.insert(tk.END, "================================\n")
+    for row in filled_data:
+        datum_str = row['Datum'].strftime('%Y-%m-%d %H:%M')
+        interpolated_mark = " (interpolált)" if row.get('Interpolated') else ""
+        result_text.insert(tk.END,
+                           f"Dátum: {datum_str}, "
+                           f"Hőmérséklet: {row['Homerseklet']:.1f}°C, "
+                           f"Páratartalom: {row['Paratartalom']:.1f}%, "
+                           f"Fényerő: {row['Fenyero']}, "
+                           f"Feszültség: {row['Feszultseg']}V"
+                           f"{interpolated_mark}\n")
+    result_text.config(state=tk.DISABLED)
+
+    output_file_path = filedialog.asksaveasfilename(
+        title="Feldolgozott adatok mentése SQL fájlként",
+        defaultextension=".sql",
+        filetypes=(("SQL fájlok", "*.sql"), ("Minden fájl", "*.*")),
+        initialfile=f"{os.path.splitext(os.path.basename(file_path))[0]}_kiegeszitett.sql" 
+    )
+
+    if output_file_path:
+        save_data_to_sql(filled_data, output_file_path, table_name)
+    else:
+        messagebox.showinfo("Mentés", "A mentés megszakítva.")
+
+
+root = tk.Tk()
+root.title("Adatfeldolgozó és Kiegészítő")
+root.geometry("800x600") 
+
+process_button = tk.Button(root, text="SQL Fájl feldolgozása és mentése", command=process_data, padx=10, pady=10, bg="#AED6F1", font=("Arial", 12))
+process_button.pack(pady=20)
+
+result_text_frame = tk.Frame(root)
+result_text_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+result_text = scrolledtext.ScrolledText(result_text_frame, wrap=tk.WORD, state=tk.DISABLED, height=25, width=100, font=("Courier New", 10))
+result_text.pack(fill=tk.BOTH, expand=True)
+
+root.mainloop()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: szöveg fogalmazó.py</summary>
+            <div class="digital-content">
+                <p>CSV adatfeldolgozó program, amely időintervallumra szűr, normalizálja az időbélyegeket és interpolálja a hiányzó adatokat. Ez a kód a külső adatokra lett létrehozva.</p>
+                <div class="code-snippet">
+import pandas as pd
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+
+def feldolgozo_program():
+    """
+    CSV adatfeldolgozó program, amely időintervallumra szűr,
+    normalizálja az időbélyegeket és interpolálja a hiányzó adatokat.
+    Módosítva: Mentési rész diagnosztikájával.
+    """
+    Tk().withdraw()
+
+    print("CSV Adatfeldolgozó Program")
+    print("--------------------------")
+
+    csv_file_path = askopenfilename(title="Válassza ki a CSV fájlt",
+                                    filetypes=[("CSV files", "*.csv"), ("All files", "*.*")])
+    if not csv_file_path:
+        print("Nincs fájl kiválasztva. A program leáll.")
+        return
+
+    start_time_input = input("Kérem, adja meg a kezdő dátumot és időpontot (pl. ÉÉÉÉ-HH-NN ÓÓ:PP formátumban, mint 2025-04-10 13:52): ")
+    end_time_input = input("Kérem, adja meg a befejező dátumot és időpontot (pl. ÉÉÉÉ-HH-NN ÓÓ:PP formátumban, mint 2025-04-10 14:55): ")
+    original_value_col = input("Kérem, adja meg az eredeti 'érték' oszlop nevét a CSV fájlban (pl. value): ")
+    new_value_col_name = input(f"Kérem, adja meg az 'érték' oszlop új nevét (az idő oszlop neve 'Date' lesz, pl. {original_value_col}_feldolgozott): ")
+
+    if not new_value_col_name.strip():
+        print("Az új érték oszlopnév nem lehet üres. A program leáll.")
+        return
+
+    try:
+        df = pd.read_csv(csv_file_path)
+        if df.empty:
+            print("A CSV fájl üres. A program leáll.")
+            return
+    except Exception as e:
+        print(f"Hiba a CSV fájl olvasása közben: {e}. A program leáll.")
+        return
+
+    time_col_original = 'createdAt'
+    if time_col_original not in df.columns:
+        time_col_original_input = input(f"Az alapértelmezett '{time_col_original}' időbélyeg oszlop nem található. Kérem, adja meg az időbélyeg oszlop pontos nevét: ")
+        if time_col_original_input not in df.columns:
+            print(f"A megadott '{time_col_original_input}' időbélyeg oszlop sem található. A program leáll.")
+            return
+        time_col_original = time_col_original_input
+        
+    if original_value_col not in df.columns:
+        print(f"Hiba: Az '{original_value_col}' oszlop nem található a CSV fájlban. A program leáll.")
+        return
+
+    df = df.rename(columns={time_col_original: 'Date', original_value_col: new_value_col_name})
+    df = df[['Date', new_value_col_name]]
+
+    df[new_value_col_name] = df[new_value_col_name].astype(str)
+    df[new_value_col_name] = df[new_value_col_name].str.replace(',', '.', regex=False)
+    
+    numeric_values = pd.to_numeric(df[new_value_col_name], errors='coerce')
+    nan_count_after_conversion = numeric_values.isnull().sum()
+    total_values_in_col = len(numeric_values)
+
+    if nan_count_after_conversion > 0:
+        print(f"\nFigyelem (Numerikus konverzió): Az '{new_value_col_name}' oszlopban {nan_count_after_conversion} érték (a {total_values_in_col}-ból/ből) nem volt közvetlenül számmá alakítható (NaN lett).")
+    
+    df[new_value_col_name] = numeric_values
+
+    if df[new_value_col_name].notna().sum() == 0 and total_values_in_col > 0 :
+        print(f"Figyelem (Numerikus konverzió): Az '{new_value_col_name}' oszlopban egyetlen érték sem volt érvényes szám a tisztítás után.")
+
+    try:
+        df['Date'] = pd.to_datetime(df['Date'])
+    except Exception as e:
+        print(f"Hiba a 'Date' oszlop datetime objektummá alakítása közben: {e}. A program leáll.")
+        return
+
+    if not df.empty and 'Date' in df.columns and not df['Date'].empty:
+        if df['Date'].notna().any():
+             print(f"\nInformáció: A beolvasott CSV fájlban talált dátumtartomány (konvertálás után):")
+             print(f"  Legkorábbi dátum a CSV-ben: {df['Date'].min()}")
+             print(f"  Legkésőbbi dátum a CSV-ben: {df['Date'].max()}")
+        else:
+            print("\nInformáció: A 'Date' oszlop konvertálása után nem maradt érvényes dátum.")
+    else:
+        print("\nInformáció: A CSV fájl nem tartalmazott érvényes adatokat/dátumokat a kezdeti feldolgozás ezen pontján.")
+
+    df['Date'] = df['Date'].apply(lambda dt: dt.replace(second=0, microsecond=0) if pd.notnull(dt) else pd.NaT)
+    df.dropna(subset=['Date'], inplace=True) 
+
+    if df.empty:
+        print("A dátumok feldolgozása (pl. hibás dátumformátumok eltávolítása) után nem maradt feldolgozható adat. A program leáll.")
+        return
+
+    df = df.groupby('Date').agg({new_value_col_name: 'mean'}).reset_index()
+    df = df.set_index('Date').sort_index()
+
+    if df.empty and total_values_in_col > 0:
+        print("Nem maradt adat a dátumok feldolgozása és aggregálása után.")
+    elif df.empty and total_values_in_col == 0 : 
+         print("A bemeneti fájl a szükséges oszlopok kiválasztása után nem tartalmazott adatot. A program leáll.")
+         return
+
+    try:
+        _start_dt_naive = pd.to_datetime(start_time_input)
+        _end_dt_naive = pd.to_datetime(end_time_input)
+    except ValueError:
+        print("Hibás dátum/idő formátumot adott meg. Használja az 'ÉÉÉÉ-HH-NN ÓÓ:PP' formátumot. A program leáll.")
+        return
+
+    data_timezone = df.index.tz 
+
+    if data_timezone is not None: 
+        if _start_dt_naive.tzinfo is None:
+            start_datetime = _start_dt_naive.tz_localize(data_timezone)
+        else: 
+            start_datetime = _start_dt_naive.tz_convert(data_timezone)
+        
+        if _end_dt_naive.tzinfo is None:
+            end_datetime = _end_dt_naive.tz_localize(data_timezone)
+        else:
+            end_datetime = _end_dt_naive.tz_convert(data_timezone)
+    else: 
+        if _start_dt_naive.tzinfo is not None:
+            start_datetime = _start_dt_naive.tz_localize(None)
+        else:
+            start_datetime = _start_dt_naive
+            
+        if _end_dt_naive.tzinfo is not None:
+            end_datetime = _end_dt_naive.tz_localize(None)
+        else:
+            end_datetime = _end_dt_naive
+
+    if start_datetime >= end_datetime:
+        print("A kezdő időpontnak korábban kell lennie a befejező időpontnál. A program leáll.")
+        return
+    
+    output_time_index = pd.date_range(start=start_datetime, end=end_datetime, freq='min')
+
+    print("\nInformáció: Újraindexelés előtti állapot:")
+    if not df.empty:
+        print(f"  A feldolgozandó adatok (df.index) dátumtartománya: {df.index.min()} --- {df.index.max()} (sorok száma: {len(df)})")
+    else:
+        print("  Nincs feldolgozandó adat az aggregálás után (df DataFrame üres).")
+    
+    if not output_time_index.empty:
+        print(f"  A kért kimeneti időindex (output_time_index) tartománya: {output_time_index.min()} --- {output_time_index.max()} (sorok száma: {len(output_time_index)})")
+        if not df.empty: 
+            if df.index.max() < output_time_index.min() or df.index.min() > output_time_index.max():
+                print("\n  !!! FIGYELEM: A CSV ADATOK DÁTUMTARTOMÁNYA ÉS A KÉRT KIMENETI IDŐTARTOMÁNY NEM FEDI ÁT EGYMÁST !!!")
+                print("  Ez azt fogja eredményezni, hogy minden érték NaN (üres) lesz a kimenetben.")
+    else:
+        print("  A kért kimeneti időindex üres (valószínűleg hibás kezdő/végdátum miatt).")
+
+    if df.empty and not output_time_index.empty: 
+        print("  Figyelem: Nincs adat a CSV-ből, ami a kért időintervallummal átfedésben lenne vagy feldolgozható lenne.")
+        df_processed = pd.DataFrame(index=output_time_index)
+        df_processed[new_value_col_name] = pd.NA 
+    elif not df.empty:
+        df_processed = df.reindex(output_time_index)
+        df_processed[new_value_col_name] = df_processed[new_value_col_name].interpolate(method='linear')
+    else: 
+        df_processed = pd.DataFrame(columns=['Date', new_value_col_name]).set_index('Date')
+
+
+    df_output = df_processed.reset_index()
+    df_output = df_output.rename(columns={'index': 'Date'})
+    if 'Date' in df_output.columns:
+        df_output['Date'] = df_output['Date'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    print("\nFeldolgozott adatok:")
+    if df_output.empty:
+        print("A megadott időintervallumra nem esik adat, vagy nem sikerült feldolgozni.")
+    else:
+        if new_value_col_name not in df_output.columns and not df_output.empty:
+             df_output[new_value_col_name] = pd.NA
+        
+        print(df_output.to_string(index=False))
+        
+        if new_value_col_name in df_output.columns and df_output[new_value_col_name].isnull().any():
+            print("\nFigyelem: A feldolgozott adatok tartalmaznak 'NaN' (Not a Number) értékeket.")
+            print("Ez akkor fordulhat elő, ha:")
+            print("  - Egy eredeti érték nem volt számmá alakítható és nem volt elegendő környező adat az interpolációhoz.")
+            print("  - A megadott időtartomány nem fedte át az eredeti adatok dátumtartományát.")
+            print("  - Vagy más okból nem volt elérhető adat az adott időpontra.")
+
+    # --- MENTÉSI RÉSZ DIAGNOSZTIKÁVAL ---
+    save_output = input("\nSzeretné menteni az eredményt CSV fájlba? (i/n): ").lower()
+    if save_output == 'i':
+        print("DEBUG: Mentési folyamat elindítva...") # DIAGNOSZTIKAI ÜZENET
+        output_filename = asksaveasfilename(
+            title="Feldolgozott adatok mentése másként...",
+            defaultextension=".csv",
+            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+            initialfile="feldolgozott_adatok.csv"
+        )
+        print(f"DEBUG: A kiválasztott fájlnév (asksaveasfilename visszatérési értéke): '{output_filename}'") # DIAGNOSZTIKAI ÜZENET
+
+        if output_filename: 
+            try:
+                print(f"DEBUG: Mentés megkísérlése a következő fájlba: {output_filename}") # DIAGNOSZTIKAI ÜZENET
+                df_output.to_csv(output_filename, index=False, encoding='utf-8-sig')
+                print(f"Az adatok sikeresen mentve a(z) '{output_filename}' fájlba.")
+            except Exception as e:
+                print(f"Hiba történt a fájl mentése közben: {e}")
+                print("Lehetséges okok: Nincs írási jogosultság a mappához, vagy a fájl meg van nyitva egy másik programban.")
+        else:
+            print("Mentés megszakítva (nem választott fájlt, vagy Mégse gombot nyomott a dialógusablakban).")
+
+if __name__ == "__main__":
+    feldolgozo_program()
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>➤ Python: txt ből spl.py</summary>
+            <div class="digital-content">
+                <p>Beolvas egy feldolgozott szöveges adatfájlt, és SQL INSERT utasításokat generál belőle. Ez a kód a saját mérési adataimra lett létrehozva.</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import filedialog
+import datetime 
+
+def szoveg_fajl_sql_konvertalo(bemeneti_fajlnev, kimeneti_sql_fajlnev):
+    """
+    Beolvas egy feldolgozott szöveges adatfájlt, és SQL INSERT utasításokat generál belőle.
+
+    Args:
+        bemeneti_fajlnev (str): A bemeneti szöveges fájl elérési útja.
+                                Formátum: 'YYYY-MM-DD HH:MM;Homerseklet;Paratartalom;Fenyero;Feszultseg'
+        kimeneti_sql_fajlnev (str): A kimeneti SQL fájl elérési útja.
+    """
+    tabla_nev = "sajat_meresi_adatok" # Adatbázis tábla neve
+    oszlopok = ["Datum", "Homerseklet", "Paratartalom", "Fenyero", "Feszultseg"]
+
+    try:
+        with open(bemeneti_fajlnev, 'r', encoding='utf-8') as be_fajl, \
+             open(kimeneti_sql_fajlnev, 'w', encoding='utf-8') as ki_fajl:
+
+            ki_fajl.write(f"-- SQL INSERT utasítások a '{tabla_nev}' táblához\n")
+            ki_fajl.write(f"-- Forrásfájl: {bemeneti_fajlnev}\n")
+            ki_fajl.write(f"-- Generálva: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+
+            for sor_szam, sor in enumerate(be_fajl, 1):
+                sor = sor.strip()
+                if not sor: 
+                    continue
+
+                adatok = sor.split(';')
+                
+                if len(adatok) == 5:
+                    
+                    sql_ertekek = [
+                        f"'{adatok[0]}'",  # Datum (timestamp) - stringként
+                        adatok[1],         # Fenyero (ldr_value) - szám stringként
+                        adatok[2],         # Paratartalom (humidity) - szám stringként
+                        adatok[3],         # Feszultseg (vcc_value) - szám stringként
+                        adatok[4]          # Homerseklet (temperature) - szám stringként
+                    ]
+                    
+                    sql_insert = f"INSERT INTO {tabla_nev} ({', '.join(oszlopok)}) VALUES ({', '.join(sql_ertekek)});\n"
+                    ki_fajl.write(sql_insert)
+                else:
+                    ki_fajl.write(f"-- FIGYELMEZTETÉS: Hibás adatsor a(z) {sor_szam}. sorban (nem 5 elemű): {sor}\n")
+            
+        print(f"Az SQL konverzió sikeres volt. Az eredmény a '{kimeneti_sql_fajlnev}' fájlban található.")
+
+    except FileNotFoundError:
+        print(f"Hiba: A(z) '{bemeneti_fajlnev}' fájl nem található.")
+    except Exception as e:
+        print(f"Hiba történt a konverzió során: {e}")
+
+def main():
+    root = tk.Tk()
+    root.withdraw() 
+
+    print("Kérlek, válaszd ki a bemeneti adatfájlt (pl. normális_adatok.txt).")
+    bemeneti_fajl = filedialog.askopenfilename(
+        title="Válaszd ki a bemeneti adatfájlt (formátum: YYYY-MM-DD HH:MM;Fenyero;Paratartalom;Feszultseg;Homerseklet)",
+        filetypes=(("Szöveges fájlok", "*.txt"), ("Minden fájl", "*.*"))
+    )
+
+    if not bemeneti_fajl:
+        print("Nem választottál bemeneti fájlt. A program leáll.")
+        return
+
+    print("Kérlek, add meg a kimeneti SQL fájl nevét és helyét (pl. generalt_adatok.sql).")
+    kimeneti_sql_fajl = filedialog.asksaveasfilename(
+        title="Add meg a kimeneti SQL fájl nevét és helyét",
+        defaultextension=".sql",
+        filetypes=(("SQL fájlok", "*.sql"), ("Minden fájl", "*.*"))
+    )
+
+    if not kimeneti_sql_fajl:
+        print("Nem adtál meg kimeneti SQL fájlt. A program leáll.")
+        return
+
+    szoveg_fajl_sql_konvertalo(bemeneti_fajl, kimeneti_sql_fajl)
+
+if __name__ == "__main__":
+    main()
+                </div>
+            </div>
+        </details>
+
+        <h2>3. Eredmények és SQL Elemzések</h2>
+
+        <h3>1. Lekérdezés: Min, Max és Átlag hőmérsékletek</h3>
+        <p>Min hőmérséklet és Max hőmérséklet valamint Atlag hőmérséklet külön nézve mind a kettő táblán. Az összes érték 2 tizedesjegyre van megadva.</p>
+        <div class="code-snippet">
+SELECT 
+  'Saját mérés' AS Forras,
+  MIN(Homerseklet) AS Min_Ho,
+  MAX(Homerseklet) AS Max_Ho,
+  ROUND(AVG(Homerseklet), 2) AS Atlag_Ho 
+FROM saját_mérési_adatok
+UNION ALL
+SELECT 
+  'Kulso forras' AS Forras,
+  MIN(Homerseklet),
+  MAX(Homerseklet),
+  ROUND(AVG(Homerseklet), 2) 
+FROM kulso_forras;
+        </div>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9p2.png" alt="Eredmény 1" class="project-img">
+
+        <h3>2. Lekérdezés: Szélsőértékek pontos dátummal</h3>
+        <p>A külső és a saját adatokat összevetve írja ki a maximum és minimum hőmérséklet és páratartalom értéket és írja hozzá a pontos dátumot, hogy mikor volt ez a mérés.</p>
+        <div class="code-snippet">
+(
+SELECT 'Minimum' AS Tipus, Datum, Homerseklet, Paratartalom
+FROM (
+SELECT Datum, Homerseklet, Paratartalom
+FROM (
+SELECT Datum, Homerseklet, Paratartalom
+FROM kulso_forras
+UNION ALL
+SELECT Datum, Homerseklet, Paratartalom
+FROM saját_mérési_adatok
+) AS osszes
+ORDER BY Homerseklet ASC, Paratartalom ASC, Datum ASC
+LIMIT 1
+) AS minadat
+)
+UNION
+(
+SELECT 'Maximum' AS Tipus, Datum, Homerseklet, Paratartalom
+FROM (
+SELECT Datum, Homerseklet, Paratartalom
+FROM (
+SELECT Datum, Homerseklet, Paratartalom
+FROM kulso_forras
+UNION ALL
+SELECT Datum, Homerseklet, Paratartalom
+FROM saját_mérési_adatok
+) AS osszes
+ORDER BY Homerseklet DESC, Paratartalom DESC, Datum ASC
+LIMIT 1
+) AS maxadat
+);
+        </div>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9p3.png" alt="Eredmény 2" class="project-img">
+
+        <h3>3. Lekérdezés: Minimum és maximum Por/Pollen érték</h3>
+        <p>A külső forrásból a Minimum és maximum Por_Pollen érték IDŐPONTTAL együtt (12:00–16:00 között).</p>
+        <div class="code-snippet">
+(
+    SELECT 'Minimum' AS Tipus, Datum, Por_Pollen
+    FROM kulso_forras
+    WHERE TIME(Datum) BETWEEN '12:00:00' AND '16:00:00'
+    ORDER BY Por_Pollen ASC
+    LIMIT 1
+)
+UNION
+(
+    SELECT 'Maximum' AS Tipus, Datum, Por_Pollen
+    FROM kulso_forras
+    WHERE TIME(Datum) BETWEEN '12:00:00' AND '16:00:00'
+    ORDER BY Por_Pollen DESC
+    LIMIT 1
+);
+        </div>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9p4.png" alt="Eredmény 3" class="project-img">
+
+        <h3>4. Lekérdezés: Időszaki átlagok (20 perces bontás)</h3>
+        <p>A kulso_forras és a saját_mérési_adatok táblákból kellett lekérdezni a 2025. március 19-én 12:00 és 16:00 közötti időszakra vonatkozóan a hőmérséklet és a páratartalom értékek átlagát, 20 perces bontásban.</p>
+        <div class="code-snippet">
+SELECT 
+  DATE_FORMAT(
+    CONCAT(
+      DATE(Datum), ' ',
+      LPAD(HOUR(Datum), 2, '0'), ':',
+      LPAD(FLOOR(MINUTE(Datum) / 20) * 20, 2, '0'), ':00'
+    ), 
+    '%Y-%m-%d %H:%i:%s'
+  ) AS Idopont,
+  ROUND(AVG(Homerseklet), 2) AS Atlag_Homerseklet,
+  ROUND(AVG(Paratartalom), 2) AS Atlag_Paratartalom
+FROM (
+    SELECT Datum, Homerseklet, Paratartalom FROM kulso_forras
+    WHERE TIME(Datum) BETWEEN '12:00:00' AND '16:00:00'
+    
+    UNION ALL
+
+    SELECT Datum, Homerseklet, Paratartalom FROM saját_mérési_adatok
+    WHERE TIME(Datum) BETWEEN '12:00:00' AND '16:00:00'
+) AS egyesitett
+GROUP BY Idopont
+ORDER BY Idopont;
+        </div>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9p5.png" alt="Eredmény 4" class="project-img">
+
+        <h2>4. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"Az adatokból sql filet csinálni ment a legnehezebben azzal ment el a legtöbb idő, de végül meg lett csak időbe tellet. Azt a rengeteg adatot egyesével nagyon sok idő lett volna átírnom mert percenként van elmentve az adatok, ezért muszály voltam a Thonny ban a python nyelven megírnom majd futtatnom, hogy átalakítsa, és azt az 5 filet átalakította és 1 sql file ba be is rakta az egészet. És akkor külön beraktam a saját_mérési_adatokat is átkonvertálva sql be."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

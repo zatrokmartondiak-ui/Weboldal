@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akasztófa Játék</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* HÁTTÉR BEÁLLÍTÁS */
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, li {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        ul { margin-left: 20px; margin-bottom: 15px; }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .img-caption {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        details {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        details[open] {
+            border-color: #bd00ff;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.1);
+        }
+        summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        summary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: #fff;
+        }
+        summary::after { content: '+'; font-size: 1.2rem; font-weight: bold; }
+        details[open] summary::after { content: '-'; }
+        details[open] summary { background: rgba(189, 0, 255, 0.2); color: #bd00ff; }
+        .digital-content { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.4); }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+            background: #050505;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1);
+            border-left: 4px solid #bd00ff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Akasztófa Játék (Tkinter)</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. Feladat kiírása</h2>
+        <p>A projekt feladata egy grafikus felületű Akasztófa (szókirakó) játék készítése Python programozási nyelven, a Tkinter könyvtár segítségével. A programnak egy véletlenszerűen kiválasztott magyar szót kell megjelenítenie csillagokkal elfedve, amelyet a játékosnak betűk tippelésével kell kitalálnia, mielőtt az akasztófa teljesen kirajzolódna.</p>
+        
+        <h3>Felhasználói felület követelményei:</h3>
+        <ul>
+            <li><strong>„Új játék” gomb:</strong> Új szó kiválasztása, hibaszámláló nullázása, rajz törlése, feladvány újragenerálása.</li>
+            <li><strong>Hibák száma kijelzés:</strong> Szövegdoboz vagy címke, amely a rossz tippek számát mutatja (Maximum 8 hiba).</li>
+            <li><strong>Feladvány megjelenítése:</strong> A kitalálandó szó csillagokkal elfedve jelenik meg (pl. VONAT → VON*T), a helyesen kitalált betűk pedig a megfelelő helyen látszanak.</li>
+            <li><strong>Magyar betűs billentyűzet:</strong> Külön gomb minden betűhöz, beleértve az ékezeteseket is. A gombokra kattintva lehessen tippelni.</li>
+            <li><strong>Akasztófa rajz:</strong> Vászon (Canvas) elemre rajzolva. Hibánként egy új testrész jelenik meg: 1. fej, 2. törzs, 3. bal kar, 4. jobb kar, 5. bal láb, 6. jobb láb.</li>
+        </ul>
+
+        <h3>Program működése és programozási követelmények:</h3>
+        <ul>
+            <li>Játék indításakor véletlen szó kiválasztása, csillagok megjelenítése, hibák lenullázása.</li>
+            <li>Tippeléskor a program ellenőrzi a betűt: ha szerepel, megjelenik; ha nem, a hibák száma nő, és a rajz kiegészül.</li>
+            <li>Játék vége: Győzelem (minden betű kitalálva) vagy Vereség (maximális hibaszám elérve). A végén a billentyűzet letiltásra kerül.</li>
+            <li>A program nyelve Python, a felület Tkinter. Objektumorientált (osztály alapú) felépítést, halmazt (vagy listát) kell használni a tippekhez, a kód legyen logikus és kommentelt.</li>
+        </ul>
+
+        <h2>2. Program működésének leírása</h2>
+        <p>A program objektumorientált (OOP) szemlélettel készült, a teljes logikát és a grafikus felületet az <code>Akasztofa</code> osztály fogja össze.</p>
+        <ul>
+            <li><strong>Inicializálás és Állapotkezelés:</strong> Induláskor a program egy listából véletlenszerűen választ egy feladványt. A felhasználó eddigi tippjeit egy halmaz (<code>self.tippek = set()</code>) tárolja, ami biztosítja, hogy egy betűt csak egyszer lehessen feldolgozni. A hibák számát egy számláló követi nyomon (maximum 8).</li>
+            <li><strong>Felület (felepites metódus):</strong> A Tkinter felület Frame-ek (keretek) segítségével van tagolva. Felül található az "Új játék" gomb, a hibaszámláló és a csillagokkal elfedett feladvány (egy Label elemben). Alul bal oldalon helyezkedik el a dinamikusan generált, magyar ékezetes karaktereket is tartalmazó virtuális billentyűzet, jobb oldalon pedig a Canvas (vászon) a rajzoláshoz.</li>
+            <li><strong>Játékmenet (tippeles metódus):</strong> Amikor a játékos rákattint egy betűre, a gomb inaktívvá válik (<code>state="disabled"</code>). Ha a betű szerepel a szóban, a gomb zöldre vált, és a szó kijelzője frissül, felfedve a talált karaktereket. Ha a tipp hibás, a gomb pirosra vált, a hibaszámláló nő, és meghívódik a rajzoló metódus.</li>
+            <li><strong>Rajzolás (akasztot_rajzol metódus):</strong> Mivel a feladatkiírás 8 hibát engedélyez, de csak 6 testrészt sorol fel, a program az első két hibánál az állványt és a kötelet rajzolja ki piros vonalakkal, majd a 3-8. hibáknál a fejet, törzset és a végtagokat feketével.</li>
+            <li><strong>Játék vége (jatek_vege metódus):</strong> Ha a játékos kitalálja a szót, vagy eléri a 8 hibát, egy messagebox (felugró ablak) értesíti az eredményről, megmutatja a helyes szót vereség esetén, és az összes betűgombot letiltja.</li>
+        </ul>
+
+        <h2>3. Program futása (képekkel)</h2>
+        
+        <h3>1. Kép: A játék kezdőképernyője</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/akasztofa_kep1.jpg" alt="A játék kezdőképernyője" class="project-img">
+        <p class="img-caption">A program induláskor kiválaszt egy szót, elrejti csillagokkal, a hibaszámláló 0-n áll, a gombok aktívak.</p>
+
+        <h3>2. Kép: Játék közben</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/akasztofa_kep2.jpg" alt="Játék közben" class="project-img">
+        <p class="img-caption">A felhasználó tippel. A helyes betűk zöld színnel, a hibásak pirossal jelennek meg a billentyűzeten. A vásznon a hibák számának megfelelően épül az akasztófa.</p>
+
+        <h3>3. Kép: Játék vége</h3>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/akasztofa_kep3.jpg" alt="Játék vége" class="project-img">
+        <p class="img-caption">A játék befejeződött, a program egy felugró ablakban tájékoztat az eredményről, a virtuális billentyűzet gombjai pedig letiltásra kerültek.</p>
+
+        <details>
+            <summary>➤ Digitális Tartalom: Programkód (Python)</summary>
+            <div class="digital-content">
+                <p>A játék teljes, futtatható forráskódja:</p>
+                <div class="code-snippet">
+import tkinter as tk
+from tkinter import messagebox
+import random
+
+class Akasztofa:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Akasztófa")
+        self.root.geometry("850x500")
+
+        # Szólista
+        self.szavak = [
+            "ALMA", "KÖRTE", "SZILVA", "BARACK", "RÁDIÓSTÚDIÓ",
+            "PROGRAMOZÁS", "PYTHON", "BILLENTYŰZET", "MONITOR",
+            "TELEFON", "ISKOLA", "EGYETEM", "TANULÁS", "VIZSGA",
+            "AUTÓ", "REPÜLŐ", "VONAT", "KERÉKPÁR", "UTAZÁS"
+        ]
+
+        # Játék változók
+        self.kivalasztott_szo = ""
+        self.tippek = set()
+        self.hibak_szama = 0
+        self.max_hiba = 8
+
+        # Grafikus felület felépítése
+        self.felepites()
+
+        # Első játék indítása
+        self.uj_jatek()
+
+    def felepites(self):
+        """A grafikus felület elemeinek elhelyezése a kép alapján."""
+
+        # --- FELSŐ SÁV (Grid elrendezés) ---
+        felso_keret = tk.Frame(self.root, pady=20, padx=20)
+        felso_keret.pack(fill="x")
+
+        # Oszlopok konfigurálása a távolságtartáshoz
+        felso_keret.columnconfigure(0, weight=0)  # Bal oldal (gomb, felirat)
+        felso_keret.columnconfigure(1, minsize=200)  # Üres tér középen (TÁVTARTÓ)
+        felso_keret.columnconfigure(2, weight=0)  # Jobb oldal (címkék)
+        felso_keret.columnconfigure(3, weight=0)  # Jobb oldal (értékek)
+
+        # 1. SOR
+        # "Új játék" gomb - Balra igazítva
+        self.uj_jatek_gomb = tk.Button(felso_keret, text="új játék", command=self.uj_jatek, width=10, bg="#f0f0f0")
+        self.uj_jatek_gomb.grid(row=0, column=0, sticky="w")
+
+        # "hibák száma" felirat - Jobb oldalra igazítva
+        tk.Label(felso_keret, text="hibák száma").grid(row=0, column=2, sticky="e", padx=10)
+
+        # Hibaszámláló doboz - Jobb szél
+        self.hiba_cimke = tk.Label(felso_keret, text="0", bg="white", width=5, relief="sunken", anchor="center")
+        self.hiba_cimke.grid(row=0, column=3, sticky="w")
+
+        # 2. SOR
+        # "feladvány" felirat - Balra igazítva (a gomb alatt)
+        tk.Label(felso_keret, text="feladvány").grid(row=1, column=0, sticky="nw", pady=(15, 0))
+
+        # A rejtett szó doboza - Jobbra igazítva (a hibaszámláló alatt kezdődik)
+        # columnspan=2, hogy lefedje a hibaszámláló alatti területet is
+        self.szo_kijelzo = tk.Label(felso_keret, text="", font=("Arial", 12, "bold"),
+                                    bg="white", relief="sunken", width=40, anchor="w")
+        self.szo_kijelzo.grid(row=1, column=2, columnspan=2, sticky="ew", pady=(15, 0), padx=(10, 0))
+
+        # --- ALSÓ RÉSZ (Billentyűzet és Rajz) ---
+        also_keret = tk.Frame(self.root)
+        also_keret.pack(fill="both", expand=True, padx=20, pady=20)
+
+        # Bal oldal: Billentyűzet
+        billentyuzet_keret = tk.Frame(also_keret)
+        billentyuzet_keret.pack(side="left", fill="y", anchor="n")
+
+        # Billentyűzet kiosztás a kép szerint
+        betuk = [
+            ["A", "Á", "B", "C", "D", "E", "É", "F", "G", "H", "I", "Í"],
+            ["J", "K", "L", "M", "N", "O", "Ó", "Ö", "Ő", "P", "Q"],
+            ["R", "S", "T", "U", "Ú", "Ü", "Ű", "V", "W", "X", "Y", "Z"]
+        ]
+
+        self.gombok = {}
+        for sor_index, sor in enumerate(betuk):
+            sor_frame = tk.Frame(billentyuzet_keret)
+            sor_frame.pack()
+            for betu in sor:
+                gomb = tk.Button(
+                    sor_frame,
+                    text=betu,
+                    width=4,
+                    height=2,
+                    bg="#f0f0f0",
+                    command=lambda b=betu: self.tippeles(b)
+                )
+                gomb.pack(side="left", padx=2, pady=2)
+                self.gombok[betu] = gomb
+
+        # Jobb oldal: Akasztófa rajz vászon
+        self.canvas = tk.Canvas(also_keret, width=300, height=350, bg="white")
+        self.canvas.pack(side="right", padx=50)
+
+    def uj_jatek(self):
+        """Játék alaphelyzetbe állítása."""
+        self.hibak_szama = 0
+        self.hiba_cimke.config(text=str(self.hibak_szama))
+        self.tippek.clear()
+        self.kivalasztott_szo = random.choice(self.szavak)
+
+        self.canvas.delete("all")
+        # Kezdő vonal (föld) kirajzolása, ahogy a képen látszik pirossal
+        # (A feladatkiírás szerint 8 hiba van, de csak 6 testrész, ezért
+        # az első 2 hibánál rajzoljuk az állványt, utána a testet)
+
+        for gomb in self.gombok.values():
+            gomb.config(state="normal", bg="#f0f0f0")
+
+        self.frissit_kijelzo()
+
+    def frissit_kijelzo(self):
+        """A csillagok frissítése."""
+        kijelzendo = ""
+        for betu in self.kivalasztott_szo:
+            if betu in self.tippek:
+                kijelzendo += betu
+            else:
+                kijelzendo += "*"
+        self.szo_kijelzo.config(text=kijelzendo)
+
+        if "*" not in kijelzendo:
+            self.jatek_vege(gyozelem=True)
+
+    def tippeles(self, betu):
+        """Tipp kezelése."""
+        if betu in self.tippek:
+            return
+
+        self.tippek.add(betu)
+        self.gombok[betu].config(state="disabled")
+
+        if betu in self.kivalasztott_szo:
+            # Helyes tipp
+            self.gombok[betu].config(bg="#90EE90")  # Világoszöld
+            self.frissit_kijelzo()
+        else:
+            # Rossz tipp
+            self.hibak_szama += 1
+            self.hiba_cimke.config(text=str(self.hibak_szama))
+            self.gombok[betu].config(bg="#FFB6C1")  # Világospiros
+            self.akasztot_rajzol()
+
+            if self.hibak_szama >= self.max_hiba:
+                self.jatek_vege(gyozelem=False)
+
+    def akasztot_rajzol(self):
+        """Rajzolás a hibák száma alapján (Max 8 hiba)."""
+        h = self.hibak_szama
+        c = self.canvas
+        # Piros vonalak, ahogy a képen látható
+
+        if h == 1:  # Talaj + Oszlop
+            c.create_line(50, 300, 200, 300, width=2, fill="red")  # Talaj
+            c.create_line(125, 300, 125, 50, width=2, fill="red")  # Oszlop
+        elif h == 2:  # Gerenda + Kötél
+            c.create_line(125, 50, 225, 50, width=2, fill="red")  # Gerenda
+            c.create_line(225, 50, 225, 80, width=2, fill="red")  # Kötél
+        elif h == 3:  # Fej (1. testrész a kiírás szerint)
+            c.create_oval(210, 80, 240, 110, width=2, outline="black")
+        elif h == 4:  # Törzs (2. testrész)
+            c.create_line(225, 110, 225, 180, width=2, fill="black")
+        elif h == 5:  # Bal kar (3. testrész)
+            c.create_line(225, 120, 205, 150, width=2, fill="black")
+        elif h == 6:  # Jobb kar (4. testrész)
+            c.create_line(225, 120, 245, 150, width=2, fill="black")
+        elif h == 7:  # Bal láb (5. testrész)
+            c.create_line(225, 180, 205, 220, width=2, fill="black")
+        elif h == 8:  # Jobb láb (6. testrész)
+            c.create_line(225, 180, 245, 220, width=2, fill="black")
+
+    def jatek_vege(self, gyozelem):
+        """Játék vége ablak."""
+        for gomb in self.gombok.values():
+            gomb.config(state="disabled")
+
+        if gyozelem:
+            messagebox.showinfo("Játék vége", f"Gratulálok! Kitaláltad a szót: {self.kivalasztott_szo}")
+        else:
+            messagebox.showinfo("Játék vége", f"Sajnálom, vesztettél! A megfejtés: {self.kivalasztott_szo}")
+            self.szo_kijelzo.config(text=self.kivalasztott_szo)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = Akasztofa(root)
+    root.mainloop()
+                </div>
+            </div>
+        </details>
+
+        <h2>5. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"Ezzel a projekttel sokat tanultam arról, hogyan kell grafikus felületet csinálni Pythonban. A legnehezebb az volt, hogy a Tkinterben mindent pontosan úgy rendezzek el, ahogy a mintaképen van. Elég sokat kellett játszani a grid és a pack beállításokkal, mire a billentyűzet és a rajzolós rész (Canvas) normálisan illeszkedett egymás mellé.</p>
+            <p>Volt a feladatban egy kis csavar is: 8 hibát lehetett véteni, de csak 6 testrész volt felsorolva. Ezt végül úgy oldottam meg, hogy az első két hibánál még csak az akasztófa állványát rajzolom ki pirossal, és csak utána jön a fekete pálcikaember. Szerencsére az osztályok (OOP) használata sokat segített, így nem lett egy nagy káosz a kód, és könnyebb volt nyilvántartani a tippeket. Összességében örülök a végeredménynek, mert a program stabilan működik, és sikerült mindent beletennem, amit a kiírás kért."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

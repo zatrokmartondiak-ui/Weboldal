@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palackozó Gépsor</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* HÁTTÉR BEÁLLÍTÁS (JAVÍTVA) */
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
+            border-bottom: 2px solid #bd00ff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00f3ff;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #bd00ff;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        p, ul {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul { margin-left: 20px; }
+        strong { color: #00f3ff; }
+
+        .project-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin: 10px 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        details {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        details[open] {
+            border-color: #bd00ff;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.1);
+        }
+        summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        summary:hover {
+            background: rgba(0, 243, 255, 0.2);
+            color: #fff;
+        }
+        summary::after { content: '+'; font-size: 1.2rem; font-weight: bold; }
+        details[open] summary::after { content: '-'; }
+        details[open] summary { background: rgba(189, 0, 255, 0.2); color: #bd00ff; }
+        .digital-content { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0, 0, 0, 0.4); }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .reflection-box {
+            background: rgba(189, 0, 255, 0.1);
+            border-left: 4px solid #bd00ff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cyber-grid"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="content-wrapper">
+        <h1>Palackozó Gépsor Hőmérséklet-Szabályozó Rendszer</h1>
+        <p style="color: #bd00ff; font-weight: bold; margin-bottom: 20px;">Zátrok Márton</p>
+
+        <h2>1. A projekt célja és feladata</h2>
+        <p>A projekt célja egy ipari palackozó gépsor pasztőrözési szakaszához tartozó automatizált hőmérséklet-szabályozó rendszer elektronikai és szoftveres részének megtervezése és megépítése. A rendszer feladata a pasztőrözési folyamat során előírt hőmérsékleti profil pontos és megbízható követése, valamint a kezelő számára a szükséges információk megjelenítése.</p>
+        <p>A megvalósított modell egy víztartályból és egy fűtő elemből áll, ahol a víz hőmérsékletét egy <strong>DS18B20</strong> típusú digitális hőmérséklet-érzékelő figyeli. A vezérlést egy <strong>RP2040</strong> mikrovezérlő végzi. A rendszer alfanumerikus kijelzőn mutatja az aktuális értékeket, nemcsak fűtéskor, hanem hűléskor is.</p>
+
+        <h2>2. Technikai megvalósítás</h2>
+        <p>A folyamat az alábbi lépésekből áll:</p>
+        <ul>
+            <li>A hideg munkadarab hőmérsékletének emelése <strong>60 °C-ra</strong>, majd tartás 30 másodpercig.</li>
+            <li>Lehűtés, amíg a hőmérséklet <strong>30°C</strong> alá nem csökken, ekkor készenlétbe áll.</li>
+        </ul>
+        <p>A működtetéshez folyamatindító gomb és vészleállító gomb is rendelkezésre áll. Fontos szempont volt a szabályozási pontosság és a biztonság.</p>
+
+        <h3>Alkatrészjegyzék:</h3>
+        <ul>
+            <li><strong>Mikrovezérlő:</strong> RP-2040 Zero</li>
+            <li><strong>Kijelző:</strong> LCD 16x2 (alfanumerikus)</li>
+            <li><strong>Szenzor:</strong> DS18B20 Hőmérséklet érzékelő</li>
+            <li><strong>Beavatkozó:</strong> Fűtőszál kapcsoló (Relay)</li>
+            <li><strong>Gombok:</strong> Indítás (Start), Vészleállító (Stop)</li>
+            <li><strong>Passzív elemek:</strong> 1kΩ ellenállások (LCD-hez és gombokhoz)</li>
+        </ul>
+
+        <h2>3. Eredmények és vizualizáció</h2>
+
+        <h3>Wokwi Szimuláció (Deszka modell)</h3>
+        <p>A rendszer működését Wokwi szimulátorban teszteltem. Az alábbi képen látható az összeállított áramkör:</p>
+        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/K%C3%A9perny%C5%91k%C3%A9p%202026-01-10%20122415.png" alt="Wokwi Projekt Kép" class="project-img">
+
+        <details>
+            <summary>➤ Digitális Tartalom: Python Kód (MicroPython)</summary>
+            <div class="digital-content">
+                <p>A vezérlő programkódja:</p>
+                <div class="code-snippet">
+from machine import Pin
+import onewire
+import ds18x20
+import time
+
+# === Hőmérséklet szenzor inicializálása ===
+ds_pin = machine.Pin(3)
+ow = onewire.OneWire(ds_pin)
+ds_sensor = ds18x20.DS18X20(ow)
+roms = ds_sensor.scan()
+if not roms:
+    raise Exception("Nincs DS18B20 szenzor csatlakoztatva!")
+sensor_rom = roms[0]
+
+# === Fűtőelem kimenet ===
+heater = Pin(16, Pin.OUT, value=1)
+
+# === LCD (16x2) ===
+class Lcd:
+    def __init__(self, rs, en, d4, d5, d6, d7):
+        self.rs = Pin(rs, Pin.OUT)
+        self.en = Pin(en, Pin.OUT)
+        self.data = [Pin(d, Pin.OUT) for d in [d4, d5, d6, d7]]
+        self.cmd(0x33)
+        time.sleep_ms(5)
+        self.cmd(0x32)
+        time.sleep_ms(5)
+        self.cmd(0x28)
+        self.cmd(0x0C)
+        self.cmd(0x06)
+        self.cmd(0x01)
+        time.sleep_ms(5)
+
+    def pulse(self):
+        self.en.off()
+        time.sleep_us(1)
+        self.en.on()
+        time.sleep_us(1)
+        self.en.off()
+        time.sleep_ms(2)
+
+    def send(self, value, mode):
+        self.rs.value(mode)
+        for i in range(4):
+            self.data[i].value((value >> (4 + i)) & 1)
+        self.pulse()
+        for i in range(4):
+            self.data[i].value((value >> i) & 1)
+        self.pulse()
+
+    def cmd(self, cmd):
+        self.send(cmd, 0)
+
+    def write(self, text):
+        for char in text:
+            self.send(ord(char), 1)
+
+    def clear(self):
+        self.cmd(0x01)
+        time.sleep_ms(5)
+
+    def move_to(self, x, y):
+        addr = 0x80 + x + 0x40 * y
+        self.cmd(addr)
+
+lcd = Lcd(12, 11, 10, 9, 8, 7)
+
+# === Gombok (START a Pin(1), VÁSZLEÁLLÍTÓ a Pin(2)) ===
+start_btn = Pin(1, Pin.IN, Pin.PULL_UP)
+stop_btn = Pin(2, Pin.IN, Pin.PULL_UP)
+
+# === Állapot ===
+fut = False
+
+def meres():
+    global fut
+    if fut:
+        return
+    fut = True
+    lcd.clear()
+    lcd.write("Folyamat indul")
+    time.sleep(1)
+
+    def aktualis_homerseklet():
+        ds_sensor.convert_temp()
+        time.sleep_ms(750)
+        return ds_sensor.read_temp(sensor_rom)
+
+    def varj_celig(cel, timeout_ms):
+        start = time.ticks_ms()
+        while True:
+            t = aktualis_homerseklet()
+            print("T:", t)
+            lcd.move_to(0, 1)
+            lcd.write("T: {:.1f} C    ".format(t))
+
+            if t >= cel:
+                return True
+            if not stop_btn.value():
+                lcd.clear()
+                lcd.write("Veszleallas!")
+                heater.on()
+                return False
+            if time.ticks_diff(time.ticks_ms(), start) > timeout_ms:
+                lcd.clear()
+                lcd.write("Timeout!")
+                heater.on()
+                return False
+            heater.off()  # Relé Bekapcsolása
+
+    def tarts(masodperc):
+        start = time.ticks_ms()
+        while time.ticks_diff(time.ticks_ms(), start) < masodperc * 1000:
+            t = aktualis_homerseklet()
+            lcd.move_to(0, 1)
+            lcd.write("T: {:.1f} C    ".format(t))
+            if not stop_btn.value():
+                lcd.clear()
+                lcd.write("Veszleallas!")
+                heater.on()
+                return False
+            time.sleep(1)
+        return True
+
+    # Felfűtés 40°C
+    lcd.clear()
+    lcd.write("Felfutes 40C")
+    heater.off()
+    if not varj_celig(40, 300000):
+        fut = False
+        return
+
+    # Tartás 50s
+    lcd.clear()
+    lcd.write("Tartas 50s")
+    if not tarts(50):
+        fut = False
+        return
+
+    # Felfűtés 70°C
+    lcd.clear()
+    lcd.write("Felfutes 70C")
+    heater.off()
+    if not varj_celig(70, 300000):
+        fut = False
+        return
+
+    # Tartás 20s
+    lcd.clear()
+    lcd.write("Tartas 20s")
+    if not tarts(20):
+        fut = False
+        return
+
+    # Hűlés
+    heater.on()
+    lcd.clear()
+    lcd.write("Hules...")
+    start = time.ticks_ms()
+    while True:
+        t = aktualis_homerseklet()
+        lcd.move_to(0, 1)
+        lcd.write("T: {:.1f} C    ".format(t))
+        if t < 30:
+            break
+        if not stop_btn.value() or time.ticks_diff(time.ticks_ms(), start) > 600000:
+            lcd.clear()
+            lcd.write("Hules leallt")
+            fut = False
+            return
+        time.sleep(1)
+
+    lcd.clear()
+    lcd.write("Kesz!")
+    fut = False
+
+# === Főciklus ===
+lcd.clear()
+lcd.write("Keszenlet")
+
+while True:
+    if not start_btn.value() and not fut:
+        meres()
+        lcd.clear()
+        lcd.write("Keszenlet")
+    time.sleep_ms(100)
+                </div>
+            </div>
+        </details>
+
+        <h2>4. Önreflexió</h2>
+        <div class="reflection-box">
+            <p>"A projekt megvalósítása nem volt nehéz, mert már csináltunk feladatokat a gombokkal és a kijelzővel is. Ami ismeretlen volt, az a Relay és a DS18B20; mind a kettőt könnyedén bekötöttem, azzal nem volt gond. Viszont a Wokwinak baja volt a DS18B20 modullal, több idő telt el, mire rájöttem, hogy ez csak a <strong>micropython-20231005-v1.21.0</strong> verzióban működik, ezért átírtam arra a verziószámot, és működött minden, ahogy kell. Lehet, azért volt ez a verzióprobléma, mert az érzékelő még béta verzióban volt. Na mindegy is, a lényeg, hogy minden könnyedén összeállt, ahogy kellett, és működött minden."</p>
+        </div>
+
+        <br><br>
+    </div>
+</body>
+</html>

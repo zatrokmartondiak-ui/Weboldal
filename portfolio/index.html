@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zátrok Márton | Portfólió</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="cyber-background"></div>
+    <div class="ambient-glow"></div>
+
+    <header class="navbar">
+        <div class="container navbar-content">
+            <a href="#home" class="logo">ZM<span>PORTFÓLIÓ</span></a>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link">Kezdőlap</a>
+                <a href="#about" class="nav-link">Rólam</a>
+                <a href="#skills" class="nav-link">Képességek</a>
+                <a href="#projects" class="nav-link">Projektek</a>
+                <a href="#reflection" class="nav-link">Önreflexió</a>
+                <a href="#contact" class="nav-link highlight-btn">Kapcsolat</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="container hero-content">
+                
+                <div class="hero-text reveal active">
+                    <p class="greeting">Üdvözöllek, a nevem</p>
+                    <h1 class="hero-title">Zátrok <span class="text-gradient">Márton</span></h1>
+                    <p class="hero-desc">A Szterényi József Technikum és Szakképző Iskola végzős tanulója.</p>
+                    <div class="typewriter-box">
+                        <span class="hero-subtitle">> </span><span id="typewriter" class="hero-subtitle"></span><span class="cursor">|</span>
+                    </div>
+                    <div class="button-group">
+                        <a href="#projects" class="btn btn-primary">Munkáim <span class="arrow">→</span></a>
+                        <a href="#contact" class="btn btn-outline">Elérhetőség</a>
+                    </div>
+                </div>
+
+                <div class="hero-image-container reveal active">
+                    <div class="image-wrapper">
+                        <img src="https://raw.githubusercontent.com/zatrokmartondiak-ui/Weboldal/refs/heads/main/Profilk%C3%A9p.png" alt="Zátrok Márton Profilkép" class="profile-img">
+                        <div class="image-glow"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="about" class="section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">01. Rólam</h2>
+                </div>
+                
+                <div class="glass-card about-text">
+                    <p><strong>Zátrok Márton</strong> vagyok, a <strong>Szterényi József Technikum és Szakképző Iskola</strong> végzős ipari informatikai technikus tanulója.</p>
+                    <p>Szakmai érdeklődésem fókuszában a <strong>webfejlesztés</strong>, valamint az <strong>Android appok</strong> és asztali <strong>Python</strong> alkalmazások készítése áll. Emellett tudok és szeretek is <strong>PLC programokat készíteni</strong>, és foglalkozom informatikai rendszerek konfigurálásával is. Célom, hogy megszerzett tudásomat mind szakmai környezetben, mind saját projektjeim megvalósítására alkalmazzam. Azért ezt az iskolát választottam, mert érdekel az informatika, és szerettem volna elmélyülni a szakma gyakorlati oldalában is.</p>
+                    
+                    <div class="tech-tags">
+                        <span class="tag">#Webfejlesztés</span>
+                        <span class="tag">#Android Dev</span>
+                        <span class="tag">#Python</span>
+                        <span class="tag">#PLC Programozás</span>
+                        <span class="tag">#Hálózatépítés</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section reveal">
+            <div class="container">
+                <div class="section-header"><h2 class="section-title">02. Képességek</h2></div>
+                <div class="skills-grid">
+                    <div class="skill-card">Weboldal fejlesztés</div>
+                    <div class="skill-card">Visual Studio Code</div>
+                    <div class="skill-card">Python</div>
+                    <div class="skill-card">Sketchware</div>
+                    <div class="skill-card">MIT App Inventor</div>
+                    <div class="skill-card">KiCad</div>
+                    <div class="skill-card">Tina</div>
+                    <div class="skill-card">FST4</div>
+                    <div class="skill-card">XAMPP</div>
+                    <div class="skill-card">Cisco Packet Tracer</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section reveal">
+            <div class="container">
+                <div class="section-header"><h2 class="section-title">03. Portfólió Munkák</h2></div>
+                <div class="projects-grid">
+                    
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Időjárási és légszennyezettségi adatelemző</h3>
+                            <div class="project-tech"><span>SQL</span><span>OpenSenseMap</span></div>
+                            <p class="project-desc">Saját építésű Arduino-alapú mérőeszköz adatainak szinkronizálása az OpenSenseMap publikus adataival. Meteorológiai paraméterek és szálló por összefüggésének vizsgálata.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="adatbazis-projekt.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Vízszivattyúzás / Tartályürítő</h3>
+                            <div class="project-tech"><span>VEEP FESTO</span><span>STEP 7</span></div>
+                            <p class="project-desc">Automatizált szivattyúrendszer vezérlése. 3 ciklusú töltés és időzített tartályürítés biztonsági reteszelésekkel.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="plc-projekt.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Palackozó Gépsor Hőmérséklet-szabályozás</h3>
+                            <div class="project-tech"><span>RP2040</span><span>MicroPython</span></div>
+                            <p class="project-desc">Pasztőrözési folyamat automatizált hőmérséklet-szabályozása. Fűtés, tartás és hűtés vezérlése DS18B20 szenzorral és LCD kijelzővel.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="palackozo-gepsor.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Akasztófa Játék</h3>
+                            <div class="project-tech"><span>Python</span><span>Tkinter</span><span>OOP</span></div>
+                            <p class="project-desc">Klasszikus akasztófa játék szoftveres megvalósítása grafikus felhasználói felülettel. Szavak véletlenszerű sorsolásával és beépített hibakezeléssel.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="akasztofa-projekt.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Környezeti Adatgyűjtő</h3>
+                            <div class="project-tech"><span>RP2040</span><span>Szenzorok</span><span>Python</span></div>
+                            <p class="project-desc">Hőmérséklet, páratartalom és fényerő mérése RP2040 mikrovezérlővel, akkumulátorfeszültség monitorozással és memóriába történő adatmentéssel.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="adatgyujto-projekt.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-body">
+                            <h3 class="project-title">Gombatermesztő Kisüzem Hálózata</h3>
+                            <div class="project-tech"><span>Cisco Packet Tracer</span><span>IoT</span><span>Hálózatépítés</span></div>
+                            <p class="project-desc">Gombatermesztő kisüzem adminisztrációs és IoT hálózatának megtervezése, szimulációs környezetben történő felépítése és tesztelése.</p>
+                            
+                            <button class="content-trigger modal-btn" data-src="halozat-projekt.html" data-type="document">
+                                <span class="icon">📄</span> Projekt Megtekintése ->
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="reflection" class="section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">04. Önreflexió</h2>
+                </div>
+                
+                <div class="glass-card about-text">
+                    <p><strong>A portfólió weboldalam elkészítése</strong> egyszerre volt izgalmas és kihívásokkal teli feladat. A célom egy modern, "cyberpunk" beütésű, tech-fókuszú dizájn megalkotása volt, ami jól tükrözi az érdeklődési körömet. A legnagyobb nehézséget talán a reszponzív felület kialakítása jelentette: sokat kellett finomhangolni a CSS-t, hogy a mobilnézet, a hamburger menü és a kártyák elrendezése (Grid és Flexbox használatával) minden képernyőméreten tökéletesen mutasson, anélkül, hogy a vizuális effektek (glow, blur) szétesnének.</p>
+                    
+                    <p>A JavaScript funkciók beépítése is tartogatott meglepetéseket. A gépelő (typewriter) animáció, a görgetésre előtűnő elemek (scroll reveal), és különösen a projekteket megnyitó felugró (modal) ablakok összehangolása igényelt némi fejtörést és hibakeresést. Nagyon oda kellett figyelni arra, hogy az iframe-ekben betöltődő aloldalak megfelelően illeszkedjenek és a tartalmak átláthatóak maradjanak. Összességében nagyon élveztem a folyamatot, mert rengeteget fejlődött a frontend (HTML, CSS, JS) tudásom, ráadásul a projektjeim dokumentálása közben magukat a szakmai feladatokat is sikerült jobban átlátnom.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section reveal">
+            <div class="container">
+                <div class="contact-box">
+                    <h2 class="section-title" style="justify-content: center; border: none; padding: 0;">Kapcsolat</h2>
+                    <p style="text-align: center; color: #a0a0a0; margin-bottom: 30px;">Kattints az elérhetőségre a másoláshoz és megnyitáshoz!</p>
+                
+                    <div class="contact-actions">
+                        
+                        <button class="contact-action-btn" onclick="handleContactClick(this, 'zatrok.marton.diak@szterenyi.hu', 'mailto:')">
+                            <span class="icon">✉️</span> zatrok.marton.diak@szterenyi.hu
+                            <span class="feedback-msg">Email másolva!</span>
+                        </button>
+
+                        <button class="contact-action-btn phone" onclick="handleContactClick(this, '+36303978261', 'tel:')">
+                            <span class="icon">📞</span> +36 30 397 8261
+                            <span class="feedback-msg">Szám másolva!</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p class="rainbow-box">
+            © 2026 Zátrok Márton
+        </p>
+    </footer>
+
+    <div id="myModal" class="modal-overlay">
+        <div class="modal-content">
+            <a href="#" target="_blank" id="openNewTabBtn" class="open-new-tab" title="Megnyitás új lapon">&#x2197;</a>
+            <span class="close-modal">&times;</span>
+            <div class="video-container" id="modalContainer">
+                <iframe id="modalIframe" src="" allow="autoplay" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        if(hamburger){
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        const textArray = ["Ipari Informatikai Technikus", "Webfejlesztő", "PLC Programozó", "Python Fejlesztő", "Hálózatépítő"];
+        let textIndex = 0;
+        let charIndex = 0;
+        const typewriterElement = document.getElementById("typewriter");
+        
+        function type() {
+            if (charIndex < textArray[textIndex].length) {
+                typewriterElement.textContent += textArray[textIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                setTimeout(erase, 2500);
+            }
+        }
+        
+        function erase() {
+            if (charIndex > 0) {
+                typewriterElement.textContent = textArray[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 40);
+            } else {
+                textIndex++;
+                if (textIndex >= textArray.length) textIndex = 0;
+                setTimeout(type, 500);
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(type, 1000);
+        });
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 50;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        setTimeout(reveal, 100);
+
+        function handleContactClick(btnElement, textToCopy, protocolPrefix) {
+            const success = copyToClipboard(textToCopy);
+            const msg = btnElement.querySelector('.feedback-msg');
+            if (msg) {
+                msg.textContent = success ? (protocolPrefix.includes('tel') ? "Szám másolva!" : "Email másolva!") : "Megnyitás...";
+                msg.classList.add('show');
+                setTimeout(() => msg.classList.remove('show'), 2000);
+            }
+            setTimeout(() => {
+                window.location.href = protocolPrefix + textToCopy;
+            }, 600);
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+                return true;
+            } else {
+                let textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    return true;
+                } catch (err) {
+                    return false;
+                }
+            }
+        }
+
+        const modal = document.getElementById("myModal");
+        const modalContainer = document.getElementById("modalContainer");
+        const iframe = document.getElementById("modalIframe");
+        const closeSpan = document.querySelector(".close-modal");
+        const triggers = document.querySelectorAll('.modal-btn');
+        const newTabBtn = document.getElementById("openNewTabBtn");
+
+        triggers.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const src = this.getAttribute('data-src');
+                const type = this.getAttribute('data-type'); 
+
+                if(src && src !== "") {
+                    if (type === 'document') {
+                        modalContainer.classList.add('doc-mode');
+                    } else {
+                        modalContainer.classList.remove('doc-mode');
+                    }
+                    modal.classList.add("show");
+                    iframe.src = src;
+                    if(newTabBtn) newTabBtn.href = src;
+                    document.body.style.overflow = 'hidden'; 
+                }
+            });
+        });
+
+        function closeModal() {
+            modal.classList.remove("show");
+            setTimeout(() => { iframe.src = ""; }, 300); 
+            modalContainer.classList.remove('doc-mode');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        if(closeSpan) closeSpan.onclick = closeModal;
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
+    </script>
+</body>
+</html>
